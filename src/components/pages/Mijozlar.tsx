@@ -4,6 +4,7 @@ import {
     TicketIcon,
     ArrowUpRightIcon
 } from "@heroicons/react/24/outline"
+import { motion } from "framer-motion"
 
 export function Mijozlar() {
     const stats = [
@@ -38,21 +39,33 @@ export function Mijozlar() {
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                 {stats.map((stat, index) => (
-                    <div key={index} className="bg-white border border-[#F0F0F0] rounded-[12px] p-5 flex flex-col gap-4 transition-all">
+                    <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                        whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                        className="bg-white border border-[#F0F0F0] rounded-[12px] p-5 flex flex-col gap-4 border-b-2 hover:border-b-[#141414] transition-colors cursor-default"
+                    >
                         <div className="flex items-center justify-between">
                             <div className={`w-12 h-12 ${stat.bg} rounded-xl flex items-center justify-center`}>
                                 <stat.icon className={`w-6 h-6 ${stat.color}`} />
                             </div>
-                            <div className="flex items-center gap-1.5 bg-white border border-[#141414] px-3 py-1 rounded-[8px]">
+                            <motion.div
+                                initial={{ scale: 0.8 }}
+                                animate={{ scale: 1 }}
+                                transition={{ delay: 0.5 + (index * 0.1) }}
+                                className="flex items-center gap-1.5 bg-white border border-[#141414] px-3 py-1 rounded-[8px]"
+                            >
                                 <ArrowUpRightIcon className="w-3.5 h-3.5 text-[#141414] stroke-[3px]" />
                                 <span className="text-[13px] font-bold text-[#141414]">{stat.growth}</span>
-                            </div>
+                            </motion.div>
                         </div>
                         <div className="flex flex-col gap-1">
                             <span className="text-[13px] font-medium text-[#999999]">{stat.title}</span>
                             <span className="text-[24px] font-bold text-[#141414]">{stat.value}</span>
                         </div>
-                    </div>
+                    </motion.div>
                 ))}
             </div>
 
