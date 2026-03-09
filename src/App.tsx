@@ -89,7 +89,7 @@ function App() {
                   <input
                     type="text"
                     placeholder="Tizim bo'ylab qidirish..."
-                    className="w-full bg-[#F3F2F0] border-none rounded-xl py-[10px] pl-[40px] pr-[16px] text-sm text-[#141414] placeholder:text-[#999999] focus:ring-0 outline-none"
+                    className="w-full bg-[#F3F2F0] border-none rounded-[4px] py-[10px] pl-[40px] pr-[16px] text-sm text-[#141414] placeholder:text-[#999999] focus:ring-0 outline-none"
                   />
                 </div>
 
@@ -97,7 +97,7 @@ function App() {
                 <div className="relative">
                   <button
                     onClick={() => setIsNotifOpen(!isNotifOpen)}
-                    className={`relative p-2 rounded-xl transition-colors group ${isNotifOpen ? 'bg-[#F3F2F0]' : 'hover:bg-[#F3F2F0]'}`}
+                    className={`relative p-2 rounded-[4px] transition-colors group ${isNotifOpen ? 'bg-[#F3F2F0]' : 'hover:bg-[#F3F2F0]'}`}
                   >
                     <BellIcon className="w-6 h-6 text-[#141414]" />
                     <span className="absolute top-[8px] right-[8px] w-[10px] h-[10px] bg-[#FF3B30] border-2 border-white rounded-full"></span>
@@ -109,7 +109,7 @@ function App() {
                         initial={{ opacity: 0, y: 8, scale: 0.98 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 8, scale: 0.98 }}
-                        className="absolute top-full right-0 mt-2 w-[300px] bg-white border border-[#E0E0E0] rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.08)] overflow-hidden z-50 origin-top-right"
+                        className="absolute top-full right-0 mt-2 w-[300px] bg-white border border-[#E0E0E0] rounded-[4px] shadow-[0_10px_40px_rgba(0,0,0,0.08)] overflow-hidden z-50 origin-top-right"
                       >
                         <div className="px-4 py-3 border-b border-[#F5F5F5] flex items-center justify-between">
                           <span className="text-[14px] font-bold text-[#141414]">Bildirishnomalar</span>
@@ -145,7 +145,7 @@ function App() {
                 <div className="relative">
                   <button
                     onClick={() => setIsLangOpen(!isLangOpen)}
-                    className="flex items-center gap-[6px] px-3 py-2 bg-[#F3F2F0] rounded-xl cursor-pointer hover:bg-[#E7E6E4] transition-colors"
+                    className="flex items-center gap-[6px] px-3 py-2 bg-[#F3F2F0] rounded-[4px] cursor-pointer hover:bg-[#E7E6E4] transition-colors"
                   >
                     <span className="text-sm font-semibold text-[#141414] uppercase">{currentLang}</span>
                     <ChevronDownIcon className={`w-4 h-4 text-[#999999] transition-transform duration-200 ${isLangOpen ? 'rotate-180' : ''}`} />
@@ -157,7 +157,7 @@ function App() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
-                        className="absolute top-full right-0 mt-2 w-[80px] bg-white border border-[#D0D0D0] rounded-xl shadow-lg overflow-hidden z-50"
+                        className="absolute top-full right-0 mt-2 w-[80px] bg-white border border-[#D0D0D0] rounded-[4px] shadow-lg overflow-hidden z-50"
                       >
                         {['uz', 'ru', 'en'].map((lang) => (
                           <button
@@ -178,7 +178,7 @@ function App() {
                 </div>
 
                 {/* Sozlamalar */}
-                <button className="p-2 hover:bg-[#F3F2F0] rounded-xl transition-colors group">
+                <button className="p-2 hover:bg-[#F3F2F0] rounded-[4px] transition-colors group">
                   <Cog6ToothIcon className="w-6 h-6 text-[#141414]" />
                 </button>
               </div>

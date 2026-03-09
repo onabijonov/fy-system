@@ -52,7 +52,7 @@
   --chart-3: oklch(0.546 0.245 262.881);
   --chart-4: oklch(0.488 0.243 264.376);
   --chart-5: oklch(0.424 0.199 265.638);
-  --radius: 0.625rem;
+  --radius: 4px;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -141,11 +141,11 @@
 
 @layer utilities {
   .apple-sq-10 {
-    border-radius: 10px;
+    border-radius: 4px;
   }
 
   .apple-sq-12 {
-    border-radius: 12px;
+    border-radius: 4px;
   }
 
   .no-scrollbar::-webkit-scrollbar {
