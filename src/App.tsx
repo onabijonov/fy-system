@@ -7,9 +7,7 @@ import {
   BellIcon,
   MagnifyingGlassIcon,
   ChevronDownIcon,
-  Cog6ToothIcon,
-  ChatBubbleLeftEllipsisIcon,
-  XMarkIcon
+  Cog6ToothIcon
 } from "@heroicons/react/24/outline"
 
 function App() {
@@ -17,7 +15,6 @@ function App() {
   const [currentLang, setCurrentLang] = useState("uz")
   const [isLangOpen, setIsLangOpen] = useState(false)
   const [isNotifOpen, setIsNotifOpen] = useState(false)
-  const [isChatOpen, setIsChatOpen] = useState(false)
 
   const notifications = [
     { id: 1, title: "Yangi tadbir", desc: "Biznes nonushta tadbiri yakunlandi.", time: "2 daqiqa oldin", type: "event", unread: true },
@@ -188,77 +185,6 @@ function App() {
           <main className="flex-1 px-[16px] py-[20px] overflow-y-auto no-scrollbar relative">
             <div className="max-w-[1400px] mx-auto h-full">
               {renderContent()}
-            </div>
-
-            {/* Floating Chat Button */}
-            <div className="fixed bottom-8 right-8 z-[60] flex flex-col items-end gap-4">
-              <AnimatePresence>
-                {isChatOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.9, y: 20, transformOrigin: "bottom right" }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                    transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                    className="w-[360px] h-[500px] bg-white border border-[#E0E0E0] rounded-[24px] shadow-[0_20px_50px_rgba(0,0,0,0.15)] overflow-hidden flex flex-col"
-                  >
-                    {/* Chat Header */}
-                    <div className="px-5 py-4 bg-[#141414] text-white flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center border border-white/10">
-                          <ChatBubbleLeftEllipsisIcon className="w-5 h-5 text-primary" />
-                        </div>
-                        <div>
-                          <div className="text-[14px] font-bold">Xabarlar</div>
-                          <div className="text-[10px] text-white/60 flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                            Online
-                          </div>
-                        </div>
-                      </div>
-                      <button
-                        onClick={() => setIsChatOpen(false)}
-                        className="p-1.5 hover:bg-white/10 rounded-lg transition-colors"
-                      >
-                        <XMarkIcon className="w-5 h-5" />
-                      </button>
-                    </div>
-
-                    {/* Chat Content */}
-                    <div className="flex-1 bg-[#F9F9F8] p-4 overflow-y-auto no-scrollbar flex flex-col gap-4">
-                      <div className="self-center bg-[#E7E6E4] px-3 py-1 rounded-full text-[10px] font-bold text-[#999999] uppercase">Bugun</div>
-
-                      <div className="bg-white border border-[#F0F0F0] p-3 rounded-2xl rounded-tl-none max-w-[85%] shadow-sm">
-                        <p className="text-[13px] text-[#141414]">Assalomu alaykum! Tizim bo'yicha qanday yordam bera olaman?</p>
-                        <span className="text-[9px] text-[#BBBBBB] mt-1 block">10:45</span>
-                      </div>
-                    </div>
-
-                    {/* Chat Input */}
-                    <div className="p-4 bg-white border-t border-[#F0F0F0] flex gap-2">
-                      <input
-                        type="text"
-                        placeholder="Xabar yozing..."
-                        className="flex-1 bg-[#F3F2F0] border-none rounded-xl px-4 py-2.5 text-sm focus:ring-0 outline-none"
-                      />
-                      <button className="bg-[#141414] text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-[#222] transition-colors">
-                        Yuborish
-                      </button>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              <button
-                onClick={() => setIsChatOpen(!isChatOpen)}
-                className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 ${isChatOpen ? 'bg-[#141414] rotate-90' : 'bg-primary hover:scale-110 active:scale-95'
-                  }`}
-              >
-                {isChatOpen ? (
-                  <XMarkIcon className="w-7 h-7 text-white" />
-                ) : (
-                  <ChatBubbleLeftEllipsisIcon className="w-7 h-7 text-white" />
-                )}
-              </button>
             </div>
           </main>
         </div>
