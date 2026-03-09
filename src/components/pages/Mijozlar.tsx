@@ -8,7 +8,9 @@ import {
     FunnelIcon,
     ArrowUpTrayIcon,
     PlusIcon,
-    EllipsisHorizontalIcon
+    EllipsisHorizontalIcon,
+    PencilIcon,
+    TrashIcon
 } from "@heroicons/react/24/outline"
 import { motion, AnimatePresence } from "framer-motion"
 import { useState } from "react"
@@ -106,25 +108,53 @@ export function Mijozlar() {
             {/* Toolbar & Table Container */}
             <div className="bg-white border border-[#F0F0F0] rounded-[16px] flex flex-col overflow-hidden">
                 {/* Toolbar */}
-                <div className="p-4 border-b border-[#F0F0F0] flex flex-wrap items-center justify-between gap-4">
-                    {/* View Switcher */}
-                    <div className="bg-[#F5F5F5] p-1 rounded-xl flex items-center gap-1">
-                        <button
-                            onClick={() => setViewMode('list')}
-                            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-[13px] font-bold transition-all ${viewMode === 'list' ? 'bg-white text-[#141414] shadow-sm' : 'text-[#999999] hover:text-[#141414]'
-                                }`}
-                        >
-                            <ListBulletIcon className="w-4 h-4" />
-                            Ro'yxat
-                        </button>
-                        <button
-                            onClick={() => setViewMode('grid')}
-                            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-[13px] font-bold transition-all ${viewMode === 'grid' ? 'bg-white text-[#141414] shadow-sm' : 'text-[#999999] hover:text-[#141414]'
-                                }`}
-                        >
-                            <Squares2X2Icon className="w-4 h-4" />
-                            Setka
-                        </button>
+                <div className="p-4 border-b border-[#F0F0F0] flex flex-wrap items-center justify-between gap-4 bg-white relative">
+                    <div className="flex items-center gap-4">
+                        {/* View Switcher */}
+                        <div className="bg-[#F5F5F5] p-1 rounded-xl flex items-center gap-1">
+                            <button
+                                onClick={() => setViewMode('list')}
+                                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-[13px] font-bold transition-all ${viewMode === 'list' ? 'bg-white text-[#141414] shadow-sm' : 'text-[#999999] hover:text-[#141414]'
+                                    }`}
+                            >
+                                <ListBulletIcon className="w-4 h-4" />
+                                Ro'yxat
+                            </button>
+                            <button
+                                onClick={() => setViewMode('grid')}
+                                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-[13px] font-bold transition-all ${viewMode === 'grid' ? 'bg-white text-[#141414] shadow-sm' : 'text-[#999999] hover:text-[#141414]'
+                                    }`}
+                            >
+                                <Squares2X2Icon className="w-4 h-4" />
+                                Setka
+                            </button>
+                        </div>
+
+                        {/* Selection Actions (Floating style) */}
+                        <AnimatePresence>
+                            {selectedMijozlar.length > 0 && (
+                                <motion.div
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -20 }}
+                                    className="flex items-center gap-2 pl-4 border-l border-[#F0F0F0]"
+                                >
+                                    <span className="text-[13px] font-medium text-[#999999] mr-2">
+                                        {selectedMijozlar.length} ta tanlandi
+                                    </span>
+                                    {selectedMijozlar.length === 1 && (
+                                        <button className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg text-[12px] font-bold hover:bg-blue-100 transition-colors">
+                                            <PencilIcon className="w-4 h-4" />
+                                            Tahrirlash
+                                        </button>
+                                    )}
+                                    <button className="flex items-center gap-2 px-3 py-1.5 bg-red-50 text-red-600 rounded-lg text-[12px] font-bold hover:bg-red-100 transition-colors">
+                                        <TrashIcon className="w-4 h-4" />
+                                        O'chirish
+                                    </button>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
 
                     {/* Actions */}
@@ -152,7 +182,7 @@ export function Mijozlar() {
                                 <th className="p-4 text-left w-12">
                                     <input
                                         type="checkbox"
-                                        checked={selectedMijozlar.length === customers.length}
+                                        checked={selectedMijozlar.length === customers.length && customers.length > 0}
                                         onChange={toggleSelectAll}
                                         className="w-4 h-4 rounded border-[#D0D0D0] text-[#141414] focus:ring-0 cursor-pointer"
                                     />
@@ -162,12 +192,12 @@ export function Mijozlar() {
                                 <th className="p-4 text-[12px] font-bold text-[#999999] uppercase tracking-wider text-left">Faoliyati</th>
                                 <th className="p-4 text-[12px] font-bold text-[#999999] uppercase tracking-wider text-left">Statusi</th>
                                 <th className="p-4 text-[12px] font-bold text-[#999999] uppercase tracking-wider text-left">A'zo bo'lgan vaqti</th>
-                                <th className="p-4 text-right"></th>
+                                <th className="p-4 text-right pr-6">Amallar</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-[#F0F0F0]">
                             {customers.map((customer) => (
-                                <tr key={customer.id} className="hover:bg-[#FBFBFB] transition-colors group">
+                                <tr key={customer.id} className={`hover:bg-[#FBFBFB] transition-colors group ${selectedMijozlar.includes(customer.id) ? 'bg-[#F9F9F8]' : ''}`}>
                                     <td className="p-4">
                                         <input
                                             type="checkbox"
@@ -204,10 +234,18 @@ export function Mijozlar() {
                                     <td className="p-4">
                                         <span className="text-[13px] text-[#999999]">{customer.joinDate}</span>
                                     </td>
-                                    <td className="p-4 text-right">
-                                        <button className="p-2 hover:bg-[#F3F2F0] rounded-lg transition-colors opacity-0 group-hover:opacity-100">
-                                            <EllipsisHorizontalIcon className="w-5 h-5 text-[#999999]" />
-                                        </button>
+                                    <td className="p-4 text-right pr-6">
+                                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <button className="p-2 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors text-[#999999]" title="Tahrirlash">
+                                                <PencilIcon className="w-4.5 h-4.5" />
+                                            </button>
+                                            <button className="p-2 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors text-[#999999]" title="O'chirish">
+                                                <TrashIcon className="w-4.5 h-4.5" />
+                                            </button>
+                                            <button className="p-2 hover:bg-[#F3F2F0] rounded-lg transition-colors text-[#999999]">
+                                                <EllipsisHorizontalIcon className="w-5 h-5" />
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
