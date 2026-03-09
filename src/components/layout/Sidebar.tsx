@@ -72,10 +72,8 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                 padding: isCollapsed ? "16px" : "40px 20px"
             }}
             transition={{
-                type: "spring",
-                stiffness: 260,
-                damping: 32,
-                mass: 1
+                duration: 0.45,
+                ease: [0.16, 1, 0.3, 1]
             }}
             className="h-screen bg-background flex flex-col gap-[30px] border-r border-[#D0D0D0] overflow-hidden relative"
         >
