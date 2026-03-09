@@ -67,33 +67,30 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
     return (
         <motion.aside
             initial={false}
-            animate={{
-                width: isCollapsed ? 80 : 340,
-                padding: isCollapsed ? "16px" : "40px 20px"
-            }}
-            transition={{
-                duration: 0.45,
-                ease: [0.16, 1, 0.3, 1]
-            }}
-            className="h-screen bg-background flex flex-col gap-[30px] border-r border-[#D0D0D0] overflow-hidden relative"
+            animate={{ width: isCollapsed ? 80 : 340 }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            className="h-screen bg-background flex flex-col border-r border-[#D0D0D0] overflow-hidden relative sticky top-0 flex-shrink-0 z-50 shadow-[4px_0_24px_rgba(0,0,0,0.02)]"
+            style={{ padding: "40px 20px" }}
         >
-            <div className={`flex items-center ${isCollapsed ? "justify-center" : "justify-between"} mb-2`}>
+            <div className="flex items-center justify-between h-8 mb-[30px] px-1">
                 <AnimatePresence mode="wait">
-                    {!isCollapsed && (
+                    {!isCollapsed ? (
                         <motion.img
                             key="logo"
                             src="/Sidebar/Logo.svg"
                             alt="Biznes Klub Logo"
-                            initial={{ opacity: 0, x: -20 }}
+                            initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
+                            exit={{ opacity: 0, x: -10 }}
                             className="w-auto h-8"
                         />
+                    ) : (
+                        <div key="spacer" className="w-0 h-8" />
                     )}
                 </AnimatePresence>
                 <button
                     onClick={() => setIsCollapsed(!isCollapsed)}
-                    className={`p-2 hover:bg-[#E7E6E4] rounded-md transition-colors group ${isCollapsed ? "w-10 h-10 flex items-center justify-center" : ""}`}
+                    className="p-2 hover:bg-[#E7E6E4] rounded-md transition-colors group flex items-center justify-center flex-shrink-0"
                 >
                     {isCollapsed ? (
                         <ChevronRightIcon className="w-5 h-5 text-[#999999] group-hover:text-[#141414]" strokeWidth={2} />
@@ -109,7 +106,7 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="relative"
+                        className="relative mb-[30px]"
                     >
                         <input
                             type="text"
@@ -146,19 +143,21 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                                         key={item.name}
                                         onClick={() => onNavigate(item.name)}
                                         layout
-                                        className={`flex items-center gap-3 apple-sq-12 cursor-pointer transition-all duration-200 group relative ${isActive
+                                        className={`flex items-center apple-sq-12 cursor-pointer transition-all duration-200 group relative overflow-hidden ${isActive
                                             ? "bg-white border border-[#D0D0D0] text-[#141414]"
                                             : "text-[#999999] border border-transparent hover:bg-[#E7E6E4]/50"
-                                            } ${isCollapsed ? "justify-center p-2 h-11 w-11 mx-auto" : "px-4 py-2"}`}
+                                            } ${isCollapsed ? "w-11 h-11" : "px-4 py-2 w-full"}`}
                                         title={isCollapsed ? item.name : ""}
                                     >
-                                        <item.icon className={`transition-all ${isCollapsed ? "w-5 h-5" : "w-5 h-5"} ${isActive ? "text-[#141414]" : "text-[#999999] group-hover:text-[#141414]"}`} strokeWidth={isActive ? 2.5 : 2} />
+                                        <div className={`flex-shrink-0 flex items-center justify-center ${isCollapsed ? "w-11 h-11" : "w-5 h-5 mr-3"}`}>
+                                            <item.icon className="w-5 h-5 transition-all" strokeWidth={isActive ? 2.5 : 2} />
+                                        </div>
                                         <AnimatePresence>
                                             {!isCollapsed && (
                                                 <motion.span
-                                                    initial={{ opacity: 0, x: -10 }}
+                                                    initial={{ opacity: 0, x: -5 }}
                                                     animate={{ opacity: 1, x: 0 }}
-                                                    exit={{ opacity: 0, x: -10 }}
+                                                    exit={{ opacity: 0, x: -5 }}
                                                     className="text-[16px] font-normal whitespace-nowrap"
                                                 >
                                                     {item.name}
@@ -185,9 +184,9 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
             >
                 <motion.div
                     layout
-                    className={`bg-[#141414] apple-sq-10 flex items-center justify-center flex-shrink-0 ${isCollapsed ? "w-11 h-11 cursor-pointer hover:scale-105 transition-transform" : "w-10 h-10"}`}
+                    className={`bg-[#141414] apple-sq-10 flex items-center justify-center flex-shrink-0 ${isCollapsed ? "w-11 h-11" : "w-10 h-10"}`}
                 >
-                    <UserIcon className={`${isCollapsed ? "w-5 h-5" : "w-6 h-6"} text-white`} />
+                    <UserIcon className="w-5 h-5 text-white" />
                 </motion.div>
                 <AnimatePresence>
                     {!isCollapsed && (
