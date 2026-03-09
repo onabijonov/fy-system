@@ -19,7 +19,11 @@ import {
     UserPlusIcon,
     ChartBarIcon,
     PlusCircleIcon,
-    ListBulletIcon
+    ListBulletIcon,
+    PaperAirplaneIcon,
+    ChatBubbleLeftEllipsisIcon,
+    EnvelopeIcon,
+    DevicePhoneMobileIcon
 } from "@heroicons/react/24/outline"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -51,7 +55,17 @@ const navigationSections = [
             },
             { name: "Vazifalar", icon: CheckCircleIcon, active: false },
             { name: "Analitika", icon: PresentationChartLineIcon, active: false },
-            { name: "Bildirishnomalar", icon: BellIcon, active: false },
+            {
+                name: "Bildirishnomalar",
+                icon: BellIcon,
+                active: false,
+                subItems: [
+                    { name: "Telegram Bot", icon: PaperAirplaneIcon },
+                    { name: "SMS", icon: ChatBubbleLeftEllipsisIcon },
+                    { name: "Email", icon: EnvelopeIcon },
+                    { name: "Ilova", icon: DevicePhoneMobileIcon }
+                ]
+            },
         ]
     },
     {
