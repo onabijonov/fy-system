@@ -132,7 +132,7 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
             initial={false}
             animate={{ width: isCollapsed ? 80 : 340 }}
             transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-            className="h-screen bg-background flex flex-col overflow-hidden relative sticky top-0 flex-shrink-0 z-50 shadow-[4px_0_24px_rgba(0,0,0,0.02)]"
+            className="h-screen bg-background flex flex-col overflow-hidden relative sticky top-0 flex-shrink-0"
             style={{ padding: "20px 20px" }}
         >
             <div className="flex items-center justify-between h-8 mb-[20px] px-1">
