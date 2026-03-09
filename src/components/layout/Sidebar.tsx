@@ -17,7 +17,9 @@ import {
     ChevronRightIcon,
     ChevronDownIcon,
     UserPlusIcon,
-    ChartBarIcon
+    ChartBarIcon,
+    PlusCircleIcon,
+    ListBulletIcon
 } from "@heroicons/react/24/outline"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -38,7 +40,15 @@ const navigationSections = [
                 ]
             },
             { name: "IP Telefoniya", icon: PhoneIcon, active: false },
-            { name: "Tadbirlar", icon: CalendarDaysIcon, active: false },
+            {
+                name: "Tadbirlar",
+                icon: CalendarDaysIcon,
+                active: false,
+                subItems: [
+                    { name: "Yangi Tadbir", icon: PlusCircleIcon },
+                    { name: "Mavjud tadbirlar", icon: ListBulletIcon }
+                ]
+            },
             { name: "Vazifalar", icon: CheckCircleIcon, active: false },
             { name: "Analitika", icon: PresentationChartLineIcon, active: false },
             { name: "Bildirishnomalar", icon: BellIcon, active: false },
