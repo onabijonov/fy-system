@@ -64,10 +64,10 @@ function App() {
       <div className="flex-1 flex flex-col h-screen bg-white overflow-hidden rounded-tl-[26px]">
         {/* Kontent bo'limi (Child container) */}
         <div className="flex-1 flex flex-col relative min-h-0">
-          <header className="px-[24px] pt-[15px] flex-shrink-0">
+          <header className="px-[24px] pt-[15px] pb-[15px] flex-shrink-0 border-b border-[#E0E0E0]">
             <div className="h-[54px] bg-white apple-sq-12 flex items-center justify-between px-[16px]">
               {/* Chap taraf: Bo'lim nomi va Izoh */}
-              <div className="flex flex-col">
+              <div className="flex flex-col gap-[2px]">
                 <div className="text-[20px] font-bold text-[#141414] leading-tight">{activeItem}</div>
                 <div className="text-[12px] font-medium text-[#999999] leading-tight">{getPageDescription()}</div>
               </div>
