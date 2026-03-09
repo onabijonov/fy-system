@@ -140,10 +140,10 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                 )}
             </AnimatePresence>
 
-            <nav className="flex-1 flex flex-col gap-[20px] overflow-y-hidden hover:overflow-y-auto no-scrollbar transition-all">
+            <nav className="flex-1 flex flex-col gap-[12px] overflow-y-hidden hover:overflow-y-auto no-scrollbar transition-all">
                 {filteredSections.map((section, index) => (
-                    <motion.div key={section.title} layout className="flex flex-col gap-[20px]">
-                        <div className="flex flex-col gap-[11px]">
+                    <motion.div key={section.title} layout className="flex flex-col gap-[12px]">
+                        <div className="flex flex-col gap-[8px]">
                             <AnimatePresence>
                                 {!isCollapsed && (
                                     <motion.h3
@@ -176,7 +176,7 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                                                 className={`flex items-center apple-sq-12 cursor-pointer transition-all duration-200 group relative overflow-hidden ${isActive
                                                     ? "bg-white border border-[#D0D0D0] text-[#141414]"
                                                     : "text-[#999999] border border-transparent hover:bg-[#E7E6E4]/50"
-                                                    } ${isCollapsed ? "w-11 h-11" : "px-4 py-3 w-full"}`}
+                                                    } ${isCollapsed ? "w-11 h-11" : "px-4 py-2 w-full"}`}
                                                 title={isCollapsed ? item.name : ""}
                                             >
                                                 <div className={`flex-shrink-0 flex items-center justify-center ${isCollapsed ? "w-11 h-11" : "w-5 h-5 mr-3"}`}>
