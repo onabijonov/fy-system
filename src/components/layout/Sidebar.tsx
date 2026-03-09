@@ -23,9 +23,10 @@ import {
     PaperAirplaneIcon,
     ChatBubbleLeftEllipsisIcon,
     EnvelopeIcon,
-    DevicePhoneMobileIcon
+    DevicePhoneMobileIcon,
+    PhotoIcon
 } from "@heroicons/react/24/outline"
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
 const navigationSections = [
@@ -93,6 +94,19 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
     const [isCollapsed, setIsCollapsed] = useState(false)
     const [searchQuery, setSearchQuery] = useState("")
     const [expandedItems, setExpandedItems] = useState<string[]>(["Sotuv bo'limi"])
+    const [profileImage, setProfileImage] = useState<string | null>(null)
+    const fileInputRef = useRef<HTMLInputElement>(null)
+
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (file) {
+            const reader = new FileReader()
+            reader.onloadend = () => {
+                setProfileImage(reader.result as string)
+            }
+            reader.readAsDataURL(file)
+        }
+    }
 
     const toggleExpand = (name: string) => {
         setExpandedItems(prev =>
@@ -277,11 +291,26 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                 layout
                 className={`mt-auto w-full transition-all duration-300 ${isCollapsed ? "bg-transparent border-none p-0 h-auto flex flex-col items-center" : "h-[60px] bg-white border border-[#D0D0D0] apple-sq-12 px-4 py-[10px] flex items-center gap-3"}`}
             >
+                <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleImageUpload}
+                    accept="image/*"
+                    className="hidden"
+                />
                 <motion.div
                     layout
-                    className={`bg-[#141414] apple-sq-10 flex items-center justify-center flex-shrink-0 ${isCollapsed ? "w-11 h-11" : "w-10 h-10"}`}
+                    onClick={() => fileInputRef.current?.click()}
+                    className={`bg-[#141414] rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer overflow-hidden group/avatar relative ${isCollapsed ? "w-11 h-11" : "w-10 h-10"}`}
                 >
-                    <UserIcon className="w-5 h-5 text-white" />
+                    {profileImage ? (
+                        <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+                    ) : (
+                        <UserIcon className="w-5 h-5 text-white" />
+                    )}
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center">
+                        <PhotoIcon className="w-4 h-4 text-white" />
+                    </div>
                 </motion.div>
                 <AnimatePresence>
                     {!isCollapsed && (
