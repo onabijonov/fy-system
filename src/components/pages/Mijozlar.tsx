@@ -43,7 +43,7 @@ export function Mijozlar() {
                             <div className={`w-12 h-12 ${stat.bg} rounded-xl flex items-center justify-center`}>
                                 <stat.icon className={`w-6 h-6 ${stat.color}`} />
                             </div>
-                            <div className="flex items-center gap-1.5 bg-white border-[2px] border-[#999999]/30 px-3 py-1 rounded-full">
+                            <div className="flex items-center gap-1.5 bg-white border border-[#141414] px-3 py-1 rounded-full">
                                 <ArrowUpRightIcon className="w-3.5 h-3.5 text-green-600 stroke-[3px]" />
                                 <span className="text-[13px] font-bold text-green-600">{stat.growth}</span>
                             </div>
