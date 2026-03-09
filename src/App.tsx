@@ -7,13 +7,22 @@ import {
   BellIcon,
   MagnifyingGlassIcon,
   ChevronDownIcon,
-  Cog6ToothIcon
+  Cog6ToothIcon,
+  CalendarDaysIcon,
+  WalletIcon
 } from "@heroicons/react/24/outline"
 
 function App() {
   const [activeItem, setActiveItem] = useState("Dashboard")
   const [currentLang, setCurrentLang] = useState("uz")
   const [isLangOpen, setIsLangOpen] = useState(false)
+  const [isNotifOpen, setIsNotifOpen] = useState(false)
+
+  const notifications = [
+    { id: 1, title: "Yangi tadbir", desc: "Biznes nonushta tadbiri yakunlandi.", time: "2 daqiqa oldin", type: "event", unread: true },
+    { id: 2, title: "To'lov tasdiqlandi", desc: "Mijoz #4412 tomonidan to'lov amalga oshirildi.", time: "1 soat oldin", type: "payment", unread: true },
+    { id: 3, title: "Tizim yangilanishi", desc: "Yangi versiya 2.4.0 muvaffaqiyatli o'rnatildi.", time: "3 soat oldin", type: "system", unread: false },
+  ]
 
   const getPageDescription = () => {
     switch (activeItem) {
@@ -85,10 +94,57 @@ function App() {
                 </div>
 
                 {/* Bildirishnoma */}
-                <button className="relative p-2 hover:bg-[#F3F2F0] rounded-xl transition-colors group">
-                  <BellIcon className="w-6 h-6 text-[#141414]" />
-                  <span className="absolute top-[8px] right-[8px] w-[10px] h-[10px] bg-[#FF3B30] border-2 border-white rounded-full"></span>
-                </button>
+                <div className="relative">
+                  <button
+                    onClick={() => setIsNotifOpen(!isNotifOpen)}
+                    className={`relative p-2 rounded-xl transition-colors group ${isNotifOpen ? 'bg-[#F3F2F0]' : 'hover:bg-[#F3F2F0]'}`}
+                  >
+                    <BellIcon className="w-6 h-6 text-[#141414]" />
+                    <span className="absolute top-[8px] right-[8px] w-[10px] h-[10px] bg-[#FF3B30] border-2 border-white rounded-full"></span>
+                  </button>
+
+                  <AnimatePresence>
+                    {isNotifOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        className="absolute top-full right-0 mt-2 w-[360px] bg-white border border-[#D0D0D0] rounded-2xl shadow-xl overflow-hidden z-50 origin-top-right"
+                      >
+                        <div className="px-4 py-3 border-b border-[#F0F0F0] flex items-center justify-between bg-white sticky top-0">
+                          <span className="text-sm font-bold text-[#141414]">Bildirishnomalar</span>
+                          <span className="text-[11px] font-bold text-white bg-[#FF3B30] px-1.5 py-0.5 rounded-full">3 ta yangi</span>
+                        </div>
+
+                        <div className="max-h-[400px] overflow-y-auto no-scrollbar">
+                          {notifications.map((notif) => (
+                            <div
+                              key={notif.id}
+                              className={`px-4 py-3 flex gap-3 hover:bg-[#F9F9F8] transition-colors cursor-pointer border-b border-[#F5F5F5] last:border-none relative ${notif.unread ? 'bg-[#FBFBFB]' : ''}`}
+                            >
+                              {notif.unread && <div className="absolute left-1 top-1/2 -translate-y-1/2 w-1 h-8 bg-primary rounded-r-full" />}
+                              <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${notif.type === 'event' ? 'bg-blue-50 text-blue-600' :
+                                notif.type === 'payment' ? 'bg-green-50 text-green-600' : 'bg-gray-50 text-gray-600'
+                                }`}>
+                                {notif.type === 'event' ? <CalendarDaysIcon className="w-5 h-5" /> :
+                                  notif.type === 'payment' ? <WalletIcon className="w-5 h-5" /> : <BellIcon className="w-5 h-5" />}
+                              </div>
+                              <div className="flex flex-col gap-0.5 overflow-hidden">
+                                <div className="text-[13px] font-bold text-[#141414] truncate">{notif.title}</div>
+                                <div className="text-[12px] text-[#666666] line-clamp-2 leading-snug">{notif.desc}</div>
+                                <div className="text-[10px] font-medium text-[#999999] mt-1">{notif.time}</div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        <button className="w-full py-3 bg-[#F9F9F8] text-[12px] font-bold text-[#141414] hover:bg-[#F3F2F0] transition-colors border-t border-[#F0F0F0]">
+                          Barchasini ko'rish
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
 
                 {/* Til o'zgartirish */}
                 <div className="relative">
