@@ -181,113 +181,118 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                 )}
             </AnimatePresence>
 
-            <nav className="flex-1 flex flex-col gap-[12px] overflow-y-hidden hover:overflow-y-auto no-scrollbar transition-all">
-                {filteredSections.map((section, index) => (
-                    <motion.div key={section.title} layout className="flex flex-col gap-[12px]">
-                        <div className="flex flex-col gap-[8px]">
-                            <AnimatePresence>
-                                {!isCollapsed && (
-                                    <motion.h3
-                                        initial={{ opacity: 0, x: -10 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        exit={{ opacity: 0, x: -10 }}
-                                        className="text-[12px] font-medium text-[#999999] uppercase tracking-wider px-4"
-                                    >
-                                        {section.title}
-                                    </motion.h3>
-                                )}
-                            </AnimatePresence>
-                            <div className="flex flex-col gap-1">
-                                {section.items.map((item) => {
-                                    const isActive = activeItem === item.name || item.subItems?.some(sub => activeItem === sub.name)
-                                    const hasSubItems = item.subItems && item.subItems.length > 0
-                                    const isExpanded = expandedItems.includes(item.name)
+            <div className="relative flex-1 flex flex-col min-h-0 overflow-hidden -mx-4 px-4">
+                <nav className="flex-1 flex flex-col gap-[12px] overflow-y-hidden hover:overflow-y-auto no-scrollbar transition-all py-2">
+                    {filteredSections.map((section, index) => (
+                        <motion.div key={section.title} layout className="flex flex-col gap-[12px]">
+                            <div className="flex flex-col gap-[8px]">
+                                <AnimatePresence>
+                                    {!isCollapsed && (
+                                        <motion.h3
+                                            initial={{ opacity: 0, x: -10 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: -10 }}
+                                            className="text-[12px] font-medium text-[#999999] uppercase tracking-wider px-4"
+                                        >
+                                            {section.title}
+                                        </motion.h3>
+                                    )}
+                                </AnimatePresence>
+                                <div className="flex flex-col gap-1">
+                                    {section.items.map((item) => {
+                                        const isActive = activeItem === item.name || item.subItems?.some(sub => activeItem === sub.name)
+                                        const hasSubItems = item.subItems && item.subItems.length > 0
+                                        const isExpanded = expandedItems.includes(item.name)
 
-                                    return (
-                                        <div key={item.name} className="flex flex-col">
-                                            <motion.div
-                                                onClick={() => {
-                                                    if (hasSubItems && !isCollapsed) {
-                                                        toggleExpand(item.name)
-                                                    } else {
-                                                        onNavigate(item.name)
-                                                    }
-                                                }}
-                                                layout
-                                                className={`flex items-center apple-sq-12 cursor-pointer transition-all duration-200 group relative overflow-hidden ${isActive
-                                                    ? "bg-white border border-[#D0D0D0] text-[#141414]"
-                                                    : "text-[#999999] border border-transparent hover:bg-[#E7E6E4]/50"
-                                                    } ${isCollapsed ? "w-11 h-11" : "px-4 py-2 w-full"}`}
-                                                title={isCollapsed ? item.name : ""}
-                                            >
-                                                <div className={`flex-shrink-0 flex items-center justify-center ${isCollapsed ? "w-11 h-11" : "w-5 h-5 mr-3"}`}>
-                                                    <item.icon className="w-5 h-5 transition-all" strokeWidth={isActive ? 2.5 : 2} />
-                                                </div>
-                                                <AnimatePresence>
-                                                    {!isCollapsed && (
+                                        return (
+                                            <div key={item.name} className="flex flex-col">
+                                                <motion.div
+                                                    onClick={() => {
+                                                        if (hasSubItems && !isCollapsed) {
+                                                            toggleExpand(item.name)
+                                                        } else {
+                                                            onNavigate(item.name)
+                                                        }
+                                                    }}
+                                                    layout
+                                                    className={`flex items-center apple-sq-12 cursor-pointer transition-all duration-200 group relative overflow-hidden ${isActive
+                                                        ? "bg-white border border-[#D0D0D0] text-[#141414]"
+                                                        : "text-[#999999] border border-transparent hover:bg-[#E7E6E4]/50"
+                                                        } ${isCollapsed ? "w-11 h-11" : "px-4 py-2 w-full"}`}
+                                                    title={isCollapsed ? item.name : ""}
+                                                >
+                                                    <div className={`flex-shrink-0 flex items-center justify-center ${isCollapsed ? "w-11 h-11" : "w-5 h-5 mr-3"}`}>
+                                                        <item.icon className="w-5 h-5 transition-all" strokeWidth={isActive ? 2.5 : 2} />
+                                                    </div>
+                                                    <AnimatePresence>
+                                                        {!isCollapsed && (
+                                                            <motion.div
+                                                                initial={{ opacity: 0, x: -5 }}
+                                                                animate={{ opacity: 1, x: 0 }}
+                                                                exit={{ opacity: 0, x: -5 }}
+                                                                className="flex-1 flex items-center justify-between"
+                                                            >
+                                                                <span className="text-[16px] font-normal whitespace-nowrap">
+                                                                    {item.name}
+                                                                </span>
+                                                                {hasSubItems && (
+                                                                    <motion.div
+                                                                        animate={{ rotate: isExpanded ? 180 : 0 }}
+                                                                        transition={{ duration: 0.2 }}
+                                                                    >
+                                                                        <ChevronDownIcon className="w-4 h-4 text-[#999999]" />
+                                                                    </motion.div>
+                                                                )}
+                                                            </motion.div>
+                                                        )}
+                                                    </AnimatePresence>
+                                                    {isActive && !isCollapsed && (
                                                         <motion.div
-                                                            initial={{ opacity: 0, x: -5 }}
-                                                            animate={{ opacity: 1, x: 0 }}
-                                                            exit={{ opacity: 0, x: -5 }}
-                                                            className="flex-1 flex items-center justify-between"
+                                                            layoutId="active-indicator"
+                                                            className="absolute left-0 w-1 h-6 bg-[#141414] rounded-r-full"
+                                                        />
+                                                    )}
+                                                </motion.div>
+
+                                                <AnimatePresence>
+                                                    {hasSubItems && isExpanded && !isCollapsed && (
+                                                        <motion.div
+                                                            initial={{ opacity: 0, height: 0 }}
+                                                            animate={{ opacity: 1, height: "auto" }}
+                                                            exit={{ opacity: 0, height: 0 }}
+                                                            className="overflow-hidden flex flex-col mt-1"
                                                         >
-                                                            <span className="text-[16px] font-normal whitespace-nowrap">
-                                                                {item.name}
-                                                            </span>
-                                                            {hasSubItems && (
-                                                                <motion.div
-                                                                    animate={{ rotate: isExpanded ? 180 : 0 }}
-                                                                    transition={{ duration: 0.2 }}
-                                                                >
-                                                                    <ChevronDownIcon className="w-4 h-4 text-[#999999]" />
-                                                                </motion.div>
-                                                            )}
+                                                            {item.subItems?.map((subItem) => {
+                                                                const isSubActive = activeItem === subItem.name
+                                                                return (
+                                                                    <motion.div
+                                                                        key={subItem.name}
+                                                                        onClick={() => onNavigate(subItem.name)}
+                                                                        className={`flex items-center pl-12 pr-4 py-2 cursor-pointer transition-all duration-200 apple-sq-10 group ${isSubActive ? "text-[#141414] font-medium" : "text-[#999999] hover:text-[#141414]"}`}
+                                                                    >
+                                                                        <subItem.icon className={`w-4 h-4 mr-3 transition-colors ${isSubActive ? "text-[#141414]" : "text-[#999999] group-hover:text-[#141414]"}`} strokeWidth={isSubActive ? 2.5 : 2} />
+                                                                        <span className="text-[15px]">{subItem.name}</span>
+                                                                    </motion.div>
+                                                                )
+                                                            })}
                                                         </motion.div>
                                                     )}
                                                 </AnimatePresence>
-                                                {isActive && !isCollapsed && (
-                                                    <motion.div
-                                                        layoutId="active-indicator"
-                                                        className="absolute left-0 w-1 h-6 bg-[#141414] rounded-r-full"
-                                                    />
-                                                )}
-                                            </motion.div>
-
-                                            <AnimatePresence>
-                                                {hasSubItems && isExpanded && !isCollapsed && (
-                                                    <motion.div
-                                                        initial={{ opacity: 0, height: 0 }}
-                                                        animate={{ opacity: 1, height: "auto" }}
-                                                        exit={{ opacity: 0, height: 0 }}
-                                                        className="overflow-hidden flex flex-col mt-1"
-                                                    >
-                                                        {item.subItems?.map((subItem) => {
-                                                            const isSubActive = activeItem === subItem.name
-                                                            return (
-                                                                <motion.div
-                                                                    key={subItem.name}
-                                                                    onClick={() => onNavigate(subItem.name)}
-                                                                    className={`flex items-center pl-12 pr-4 py-2 cursor-pointer transition-all duration-200 apple-sq-10 group ${isSubActive ? "text-[#141414] font-medium" : "text-[#999999] hover:text-[#141414]"}`}
-                                                                >
-                                                                    <subItem.icon className={`w-4 h-4 mr-3 transition-colors ${isSubActive ? "text-[#141414]" : "text-[#999999] group-hover:text-[#141414]"}`} strokeWidth={isSubActive ? 2.5 : 2} />
-                                                                    <span className="text-[15px]">{subItem.name}</span>
-                                                                </motion.div>
-                                                            )
-                                                        })}
-                                                    </motion.div>
-                                                )}
-                                            </AnimatePresence>
-                                        </div>
-                                    )
-                                })}
+                                            </div>
+                                        )
+                                    })}
+                                </div>
                             </div>
-                        </div>
-                        {index < filteredSections.length - 1 && (
-                            <div className="h-[1px] bg-[#E0E0E0] mx-4" />
-                        )}
-                    </motion.div>
-                ))}
-            </nav>
+                            {index < filteredSections.length - 1 && (
+                                <div className="h-[1px] bg-[#E0E0E0] mx-4" />
+                            )}
+                        </motion.div>
+                    ))}
+                </nav>
+                {/* Scroll Blurs */}
+                <div className="absolute top-0 left-0 right-0 h-4 bg-gradient-to-b from-[#F3F2F0] to-transparent pointer-events-none z-10" />
+                <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[#F3F2F0] via-[#F3F2F0]/80 to-transparent pointer-events-none z-10" />
+            </div>
 
             <motion.div
                 layout
