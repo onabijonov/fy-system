@@ -265,10 +265,8 @@ export function Mijozlar() {
                                             <td className="p-4">
                                                 <span className="text-[13px] text-[#141414]">{customer.phone}</span>
                                             </td>
-                                            <td className="p-4">
-                                                <div className="max-w-[150px] 2xl:max-w-[200px] truncate" title={customer.activity}>
-                                                    <span className="text-[13px] text-[#141414] font-medium">{customer.activity}</span>
-                                                </div>
+                                            <td className="p-4" style={{ minWidth: '150px' }}>
+                                                <div className="text-[13px] text-[#141414] font-medium leading-tight">{customer.activity}</div>
                                             </td>
                                             <td className="p-4">
                                                 <span className="text-[13px] text-[#141414] font-medium">{customer.eventsCount} ta</span>
@@ -325,23 +323,23 @@ export function Mijozlar() {
                                             />
                                         </div>
 
-                                        <div className="flex items-center justify-between mt-2">
-                                            <div className="flex items-center gap-3">
-                                                <div className="relative group/avatar w-12 h-12 rounded-full bg-[#F5F5F5] border border-[#E0E0E0] flex items-center justify-center text-[14px] font-bold text-[#141414] overflow-hidden flex-shrink-0">
+                                        <div className="flex items-start justify-between mt-2 gap-3">
+                                            <div className="flex items-center gap-3 w-full">
+                                                <div className="relative group/avatar w-16 h-16 rounded-full bg-[#F5F5F5] border border-[#E0E0E0] flex items-center justify-center text-[18px] font-bold text-[#141414] overflow-hidden flex-shrink-0">
                                                     {customer.image}
                                                     <div
                                                         className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity cursor-pointer text-white"
                                                         title="Rasmni yuklab olish"
                                                     >
-                                                        <ArrowDownTrayIcon className="w-4 h-4" />
+                                                        <ArrowDownTrayIcon className="w-5 h-5" />
                                                     </div>
                                                 </div>
-                                                <div className="flex flex-col">
-                                                    <span className="text-[15px] font-bold text-[#141414]">{customer.name}</span>
-                                                    <span className="text-[12px] text-[#999999]">{customer.email}</span>
+                                                <div className="flex flex-col flex-1 min-w-0 pr-2">
+                                                    <span className="text-[16px] font-bold text-[#141414] leading-tight break-words">{customer.name}</span>
+                                                    <span className="text-[13px] text-[#999999] mt-0.5 break-all">{customer.email}</span>
                                                 </div>
                                             </div>
-                                            <button className="p-2 hover:bg-[#F5F5F5] rounded-[6px] transition-colors text-[#999999]">
+                                            <button className="p-2 hover:bg-[#F5F5F5] rounded-[6px] transition-colors text-[#999999] flex-shrink-0">
                                                 <EllipsisHorizontalIcon className="w-5 h-5" />
                                             </button>
                                         </div>
@@ -351,9 +349,9 @@ export function Mijozlar() {
                                                 <span className="text-[#999999]">Telefon</span>
                                                 <span className="text-[#141414] font-medium">{customer.phone}</span>
                                             </div>
-                                            <div className="flex justify-between items-center text-[13px] gap-2">
-                                                <span className="text-[#999999] flex-shrink-0">Faoliyati</span>
-                                                <span className="text-[#141414] font-medium truncate text-right" title={customer.activity}>{customer.activity}</span>
+                                            <div className="flex justify-between items-start text-[13px] gap-2">
+                                                <span className="text-[#999999] flex-shrink-0 pt-0.5">Faoliyati</span>
+                                                <span className="text-[#141414] font-medium text-right leading-relaxed">{customer.activity}</span>
                                             </div>
                                             <div className="flex justify-between items-center text-[13px]">
                                                 <span className="text-[#999999]">Tadbirlar</span>
