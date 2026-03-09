@@ -15,6 +15,33 @@ function App() {
   const [currentLang, setCurrentLang] = useState("uz")
   const [isLangOpen, setIsLangOpen] = useState(false)
 
+  const getPageDescription = () => {
+    switch (activeItem) {
+      case "Dashboard":
+        return "Tizimdagi barcha asosiy ko'rsatkichlar va statistika."
+      case "Mijozlar":
+        return "Barcha mijozlar bazasi va ular bilan ishlash bo'limi."
+      case "Sotuv bo'limi":
+        return "Savdo jarayonlari, lidlar va pipline tahlili."
+      case "Tadbirlar":
+        return "Klub doirasidagi barcha tadbirlar va uchrashuvlar."
+      case "Bildirishnomalar":
+        return "Xabarnomalar, bot va SMS bildirishnomalar boshqaruvi."
+      case "Cash Flow":
+        return "Pul oqimi va moliyaviy tranzaksiyalar monitoringi."
+      case "To'lovlar":
+        return "Mijozlar tomonidan amalga oshirilgan barcha to'lovlar."
+      case "Hodimlar":
+        return "Jamoa a'zolari va ularning ruxsatnomalarini boshqarish."
+      case "Sozlamalar":
+        return "Tizim sozlamalari va shaxsiy ma'lumotlarni tahrirlash."
+      case "Podkast":
+        return "Audio kontentlar va podkastlar ro'yxati."
+      default:
+        return "Ushbu bo'lim haqida ma'lumot yaqin orada qo'shiladi."
+    }
+  }
+
   const renderContent = () => {
     switch (activeItem) {
       case "Dashboard":
@@ -39,8 +66,11 @@ function App() {
         <div className="flex-1 flex flex-col relative min-h-0">
           <header className="px-[24px] pt-[15px] flex-shrink-0">
             <div className="h-[54px] bg-white apple-sq-12 flex items-center justify-between px-[16px]">
-              {/* Chap taraf: Bo'lim nomi */}
-              <div className="text-[20px] font-bold text-[#141414]">{activeItem}</div>
+              {/* Chap taraf: Bo'lim nomi va Izoh */}
+              <div className="flex flex-col">
+                <div className="text-[20px] font-bold text-[#141414] leading-tight">{activeItem}</div>
+                <div className="text-[12px] font-medium text-[#999999] leading-tight">{getPageDescription()}</div>
+              </div>
 
               {/* O'ng taraf: Qidiruv, Bildirishnoma, Til, Sozlamalar */}
               <div className="flex items-center gap-[12px]">
