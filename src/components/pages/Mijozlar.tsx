@@ -76,14 +76,23 @@ export function Mijozlar() {
         visible: {
             opacity: 1,
             transition: {
-                staggerChildren: 0.05
+                staggerChildren: 0.08
             }
         }
     };
 
     const rowVariants = {
-        hidden: { opacity: 0, x: -10 },
-        visible: { opacity: 1, x: 0 }
+        hidden: { opacity: 0, y: 15, scale: 0.98 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            transition: {
+                type: "spring" as const,
+                bounce: 0,
+                duration: 0.5
+            }
+        }
     };
 
     return (
