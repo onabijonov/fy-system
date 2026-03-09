@@ -203,7 +203,7 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                     )}
                 </AnimatePresence>
                 {!isCollapsed && (
-                    <ArrowLeftOnRectangleIcon className="w-5 h-5 text-[#999999] cursor-pointer hover:text-[#141414] transition-colors flex-shrink-0" strokeWidth={2} />
+                    <ArrowLeftOnRectangleIcon className="ml-auto w-5 h-5 text-[#999999] cursor-pointer hover:text-[#141414] transition-colors flex-shrink-0" strokeWidth={2} />
                 )}
             </motion.div>
         </motion.aside>
