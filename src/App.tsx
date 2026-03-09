@@ -70,7 +70,7 @@ function App() {
   return (
     <div className="h-screen bg-[#F5F5F5] text-foreground flex overflow-hidden">
       <Sidebar activeItem={activeItem} onNavigate={setActiveItem} />
-      <div className="flex-1 flex flex-col h-screen bg-white overflow-hidden rounded-tl-[26px] relative z-10 shadow-[-6px_0_24px_rgba(0,0,0,0.03)]">
+      <div className="flex-1 flex flex-col h-screen bg-white overflow-hidden rounded-none relative z-10 shadow-[-6px_0_24px_rgba(0,0,0,0.03)]">
         {/* Kontent bo'limi (Child container) */}
         <div className="flex-1 flex flex-col relative min-h-0">
           <header className="px-[24px] pt-[15px] pb-[15px] flex-shrink-0 border-b border-[#E0E0E0]">
