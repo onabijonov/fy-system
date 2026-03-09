@@ -106,40 +106,35 @@ function App() {
                   <AnimatePresence>
                     {isNotifOpen && (
                       <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        initial={{ opacity: 0, y: 8, scale: 0.98 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        className="absolute top-full right-0 mt-2 w-[360px] bg-white border border-[#D0D0D0] rounded-2xl shadow-xl overflow-hidden z-50 origin-top-right"
+                        exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                        className="absolute top-full right-0 mt-2 w-[300px] bg-white border border-[#E0E0E0] rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.08)] overflow-hidden z-50 origin-top-right"
                       >
-                        <div className="px-4 py-3 border-b border-[#F0F0F0] flex items-center justify-between bg-white sticky top-0">
-                          <span className="text-sm font-bold text-[#141414]">Bildirishnomalar</span>
-                          <span className="text-[11px] font-bold text-white bg-[#FF3B30] px-1.5 py-0.5 rounded-full">3 ta yangi</span>
+                        <div className="px-4 py-3 border-b border-[#F5F5F5] flex items-center justify-between">
+                          <span className="text-[14px] font-bold text-[#141414]">Bildirishnomalar</span>
+                          <div className="w-2 h-2 bg-[#FF3B30] rounded-full shadow-[0_0_8px_rgba(255,59,48,0.4)]" />
                         </div>
 
-                        <div className="max-h-[400px] overflow-y-auto no-scrollbar">
+                        <div className="max-h-[360px] overflow-y-auto no-scrollbar py-1">
                           {notifications.map((notif) => (
                             <div
                               key={notif.id}
-                              className={`px-4 py-3 flex gap-3 hover:bg-[#F9F9F8] transition-colors cursor-pointer border-b border-[#F5F5F5] last:border-none relative ${notif.unread ? 'bg-[#FBFBFB]' : ''}`}
+                              className={`px-4 py-2.5 flex items-start gap-3 hover:bg-[#F9F9F8] transition-colors cursor-pointer relative`}
                             >
-                              {notif.unread && <div className="absolute left-1 top-1/2 -translate-y-1/2 w-1 h-8 bg-primary rounded-r-full" />}
-                              <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${notif.type === 'event' ? 'bg-blue-50 text-blue-600' :
-                                notif.type === 'payment' ? 'bg-green-50 text-green-600' : 'bg-gray-50 text-gray-600'
-                                }`}>
-                                {notif.type === 'event' ? <CalendarDaysIcon className="w-5 h-5" /> :
-                                  notif.type === 'payment' ? <WalletIcon className="w-5 h-5" /> : <BellIcon className="w-5 h-5" />}
-                              </div>
+                              <div className={`mt-1 w-2 h-2 rounded-full flex-shrink-0 ${notif.unread ? 'bg-primary' : 'bg-transparent border border-[#D0D0D0]'
+                                }`} />
                               <div className="flex flex-col gap-0.5 overflow-hidden">
-                                <div className="text-[13px] font-bold text-[#141414] truncate">{notif.title}</div>
-                                <div className="text-[12px] text-[#666666] line-clamp-2 leading-snug">{notif.desc}</div>
-                                <div className="text-[10px] font-medium text-[#999999] mt-1">{notif.time}</div>
+                                <div className="text-[12px] font-bold text-[#141414] leading-tight">{notif.title}</div>
+                                <div className="text-[11px] text-[#666666] line-clamp-1 leading-tight">{notif.desc}</div>
+                                <div className="text-[10px] text-[#BBBBBB] mt-0.5">{notif.time}</div>
                               </div>
                             </div>
                           ))}
                         </div>
 
-                        <button className="w-full py-3 bg-[#F9F9F8] text-[12px] font-bold text-[#141414] hover:bg-[#F3F2F0] transition-colors border-t border-[#F0F0F0]">
-                          Barchasini ko'rish
+                        <button className="w-full py-2.5 text-[11px] font-bold text-[#999999] hover:text-[#141414] hover:bg-[#F9F9F8] transition-colors border-t border-[#F5F5F5]">
+                          Bunasini hammasini ko'rish
                         </button>
                       </motion.div>
                     )}
