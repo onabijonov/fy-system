@@ -65,15 +65,14 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
 
     return (
         <aside className={`${isCollapsed ? "w-[80px]" : "w-[340px]"} h-screen bg-background p-[20px] md:p-[40px] flex flex-col gap-[30px] border-r border-[#D0D0D0] transition-all duration-300 ease-in-out ${isCollapsed ? "!p-4" : ""}`}>
-            <div className="flex items-center justify-between">
+            <div className={`flex items-center ${isCollapsed ? "justify-center" : "justify-between"}`}>
                 {!isCollapsed && <img src="/Sidebar/Logo.svg" alt="Biznes Klub Logo" className="w-auto h-8 animate-in fade-in duration-300" />}
-                {isCollapsed && <div className="w-8 h-8 bg-[#E7E6E4] apple-sq-10 flex items-center justify-center font-bold text-[#141414]">BK</div>}
                 <button
                     onClick={() => setIsCollapsed(!isCollapsed)}
-                    className="p-1 hover:bg-[#E7E6E4] rounded-md transition-colors group"
+                    className={`p-2 hover:bg-[#E7E6E4] rounded-md transition-colors group ${isCollapsed ? "w-10 h-10 flex items-center justify-center" : ""}`}
                 >
                     {isCollapsed ? (
-                        <ChevronRightIcon className="w-5 h-5 text-[#999999] group-hover:text-[#141414]" strokeWidth={2} />
+                        <ChevronRightIcon className="w-6 h-6 text-[#999999] group-hover:text-[#141414]" strokeWidth={2.5} />
                     ) : (
                         <ChevronLeftIcon className="w-5 h-5 text-[#999999] group-hover:text-[#141414]" strokeWidth={2} />
                     )}
@@ -91,7 +90,7 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                 <MagnifyingGlassIcon className="absolute right-5 top-1/2 -translate-y-1/2 w-5 h-5 text-[#D0D0D0]" strokeWidth={2} />
             </div>
 
-            <nav className="flex-1 flex flex-col gap-[20px] overflow-y-auto no-scrollbar">
+            <nav className="flex-1 flex flex-col gap-[20px] overflow-y-hidden hover:overflow-y-auto no-scrollbar transition-all">
                 {filteredSections.map((section) => (
                     <div key={section.title} className="flex flex-col gap-[11px]">
                         {!isCollapsed && (
@@ -106,13 +105,13 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                                     <div
                                         key={item.name}
                                         onClick={() => onNavigate(item.name)}
-                                        className={`flex items-center gap-3 px-4 py-2 apple-sq-12 cursor-pointer transition-all duration-200 group ${isActive
+                                        className={`flex items-center gap-3 apple-sq-12 cursor-pointer transition-all duration-200 group ${isActive
                                             ? "bg-white border border-[#D0D0D0] text-[#141414]"
                                             : "text-[#999999] border border-transparent hover:bg-[#E7E6E4]/50"
-                                            } ${isCollapsed ? "justify-center px-2" : ""}`}
+                                            } ${isCollapsed ? "justify-center p-3 h-14 w-14 mx-auto" : "px-4 py-2"}`}
                                         title={isCollapsed ? item.name : ""}
                                     >
-                                        <item.icon className={`w-5 h-5 transition-colors ${isActive ? "text-[#141414]" : "text-[#999999] group-hover:text-[#141414]"}`} strokeWidth={2} />
+                                        <item.icon className={`transition-all ${isCollapsed ? "w-7 h-7" : "w-5 h-5"} ${isActive ? "text-[#141414]" : "text-[#999999] group-hover:text-[#141414]"}`} strokeWidth={isActive ? 2.5 : 2} />
                                         {!isCollapsed && (
                                             <span className="text-[16px] font-normal animate-in fade-in slide-in-from-left-2 duration-300">
                                                 {item.name}
@@ -126,9 +125,9 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                 ))}
             </nav>
 
-            <div className={`mt-auto w-full transition-all duration-300 ${isCollapsed ? "bg-transparent border-none p-0 h-auto" : "h-[60px] bg-white border border-[#D0D0D0] apple-sq-12 px-4 py-[10px] flex items-center gap-3"}`}>
-                <div className={`w-10 h-10 bg-[#141414] apple-sq-10 flex items-center justify-center flex-shrink-0 ${isCollapsed ? "mx-auto cursor-pointer hover:scale-105 transition-transform" : ""}`}>
-                    <UserIcon className="w-6 h-6 text-white" />
+            <div className={`mt-auto w-full transition-all duration-300 ${isCollapsed ? "bg-transparent border-none p-0 h-auto flex flex-col items-center" : "h-[60px] bg-white border border-[#D0D0D0] apple-sq-12 px-4 py-[10px] flex items-center gap-3"}`}>
+                <div className={`bg-[#141414] apple-sq-10 flex items-center justify-center flex-shrink-0 ${isCollapsed ? "w-14 h-14 cursor-pointer hover:scale-105 transition-transform" : "w-10 h-10"}`}>
+                    <UserIcon className={`${isCollapsed ? "w-7 h-7" : "w-6 h-6"} text-white`} />
                 </div>
                 {!isCollapsed && (
                     <>
