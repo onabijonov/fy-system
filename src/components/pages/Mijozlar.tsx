@@ -47,11 +47,11 @@ export function Mijozlar() {
     ];
 
     const customers = [
-        { id: 1, name: "Aziz Rahimov", email: "aziz.r@gmail.com", phone: "+998 90 123 45 67", activity: "Tadbirkor", status: "Aktiv", joinDate: "12 Okt, 2023", image: "AR" },
-        { id: 2, name: "Malika Shoraxmedova", email: "malika.sh@mail.ru", phone: "+998 93 456 78 90", activity: "Dizayner", status: "Kutishda", joinDate: "15 Okt, 2023", image: "MS" },
-        { id: 3, name: "Jasur Abdullaev", email: "jasur.a@outlook.com", phone: "+998 94 789 12 34", activity: "IT Mutaxassis", status: "Aktiv", joinDate: "20 Okt, 2023", image: "JA" },
+        { id: 1, name: "Aziz Rahimov", email: "aziz.r@gmail.com", phone: "+998 90 123 45 67", activity: "Tadbirkor", status: "Faol", joinDate: "12 Okt, 2023", image: "AR" },
+        { id: 2, name: "Malika Shoraxmedova", email: "malika.sh@mail.ru", phone: "+998 93 456 78 90", activity: "Dizayner", status: "Nofaol", joinDate: "15 Okt, 2023", image: "MS" },
+        { id: 3, name: "Jasur Abdullaev", email: "jasur.a@outlook.com", phone: "+998 94 789 12 34", activity: "IT Mutaxassis", status: "Faol", joinDate: "20 Okt, 2023", image: "JA" },
         { id: 4, name: "Dilnoza Karimova", email: "dili.k@gmail.com", phone: "+998 99 321 65 43", activity: "Marketolog", status: "Nofaol", joinDate: "22 Okt, 2023", image: "DK" },
-        { id: 5, name: "Otabek Mahmudov", email: "otabek.m@gmail.com", phone: "+998 90 987 65 43", activity: "Menejer", status: "Aktiv", joinDate: "25 Okt, 2023", image: "OM" },
+        { id: 5, name: "Otabek Mahmudov", email: "otabek.m@gmail.com", phone: "+998 90 987 65 43", activity: "Menejer", status: "Faol", joinDate: "25 Okt, 2023", image: "OM" },
     ];
 
     const toggleSelectAll = () => {
@@ -69,6 +69,21 @@ export function Mijozlar() {
             setSelectedMijozlar([...selectedMijozlar, id])
         }
     }
+
+    const tableVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.05
+            }
+        }
+    };
+
+    const rowVariants = {
+        hidden: { opacity: 0, x: -10 },
+        visible: { opacity: 1, x: 0 }
+    };
 
     return (
         <div className="flex flex-col gap-6 h-full animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -143,7 +158,7 @@ export function Mijozlar() {
                                         {selectedMijozlar.length} ta tanlandi
                                     </span>
                                     {selectedMijozlar.length === 1 && (
-                                        <button className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg text-[12px] font-bold hover:bg-blue-100 transition-colors">
+                                        <button className="flex items-center gap-2 px-3 py-1.5 bg-white border border-[#E0E0E0] text-[#141414] rounded-lg text-[12px] font-bold hover:bg-[#F9F9F8] transition-colors shadow-sm">
                                             <PencilIcon className="w-4 h-4" />
                                             Tahrirlash
                                         </button>
@@ -176,7 +191,12 @@ export function Mijozlar() {
 
                 {/* Table Content */}
                 <div className="overflow-x-auto no-scrollbar">
-                    <table className="w-full border-collapse">
+                    <motion.table
+                        className="w-full border-collapse"
+                        initial="hidden"
+                        animate="visible"
+                        variants={tableVariants}
+                    >
                         <thead>
                             <tr className="bg-[#FBFBFB] border-b border-[#F0F0F0]">
                                 <th className="p-4 text-left w-12">
@@ -197,7 +217,11 @@ export function Mijozlar() {
                         </thead>
                         <tbody className="divide-y divide-[#F0F0F0]">
                             {customers.map((customer) => (
-                                <tr key={customer.id} className={`hover:bg-[#FBFBFB] transition-colors group ${selectedMijozlar.includes(customer.id) ? 'bg-[#F9F9F8]' : ''}`}>
+                                <motion.tr
+                                    key={customer.id}
+                                    variants={rowVariants}
+                                    className={`hover:bg-[#FBFBFB] transition-colors group ${selectedMijozlar.includes(customer.id) ? 'bg-[#F9F9F8]' : ''}`}
+                                >
                                     <td className="p-4">
                                         <input
                                             type="checkbox"
@@ -224,9 +248,7 @@ export function Mijozlar() {
                                         <span className="text-[13px] text-[#141414] font-medium">{customer.activity}</span>
                                     </td>
                                     <td className="p-4">
-                                        <span className={`inline-flex px-2.5 py-1 rounded-lg text-[11px] font-bold ${customer.status === 'Aktiv' ? 'bg-green-50 text-green-600' :
-                                                customer.status === 'Kutishda' ? 'bg-yellow-50 text-yellow-600' :
-                                                    'bg-red-50 text-red-600'
+                                        <span className={`inline-flex px-2.5 py-1 rounded-lg text-[11px] font-bold ${customer.status === 'Faol' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'
                                             }`}>
                                             {customer.status}
                                         </span>
@@ -236,7 +258,7 @@ export function Mijozlar() {
                                     </td>
                                     <td className="p-4 text-right pr-6">
                                         <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <button className="p-2 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors text-[#999999]" title="Tahrirlash">
+                                            <button className="p-2 hover:bg-[#F5F5F5] hover:text-[#141414] rounded-lg transition-colors text-[#999999]" title="Tahrirlash">
                                                 <PencilIcon className="w-4.5 h-4.5" />
                                             </button>
                                             <button className="p-2 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors text-[#999999]" title="O'chirish">
@@ -247,10 +269,10 @@ export function Mijozlar() {
                                             </button>
                                         </div>
                                     </td>
-                                </tr>
+                                </motion.tr>
                             ))}
                         </tbody>
-                    </table>
+                    </motion.table>
                 </div>
             </div>
         </div>
