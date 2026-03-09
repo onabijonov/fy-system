@@ -12,24 +12,24 @@ export function Mijozlar() {
             value: "1,284",
             growth: "+12.5%",
             icon: UsersIcon,
-            color: "text-blue-600",
-            bg: "bg-blue-50"
+            color: "text-[#141414]",
+            bg: "bg-[#F5F5F5]"
         },
         {
             title: "Yangi mijozlar (30 kun)",
             value: "156",
             growth: "+8.2%",
             icon: UserPlusIcon,
-            color: "text-green-600",
-            bg: "bg-green-50"
+            color: "text-[#141414]",
+            bg: "bg-[#F5F5F5]"
         },
         {
             title: "Joy band qilgan mijozlar",
             value: "428",
             growth: "+24.0%",
             icon: TicketIcon,
-            color: "text-purple-600",
-            bg: "bg-purple-50"
+            color: "text-[#141414]",
+            bg: "bg-[#F5F5F5]"
         }
     ];
 
