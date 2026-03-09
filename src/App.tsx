@@ -44,6 +44,8 @@ function App() {
         return "Tizim sozlamalari va shaxsiy ma'lumotlarni tahrirlash."
       case "Podkast":
         return "Audio kontentlar va podkastlar ro'yxati."
+      case "API":
+        return "Tizimning tashqi integratsiyalar va API sozlamalari."
       default:
         return "Ushbu bo'lim haqida ma'lumot yaqin orada qo'shiladi."
     }

@@ -26,7 +26,8 @@ import {
     DevicePhoneMobileIcon,
     PhotoIcon,
     MicrophoneIcon,
-    Squares2X2Icon
+    Squares2X2Icon,
+    CommandLineIcon
 } from "@heroicons/react/24/outline"
 import { useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -84,7 +85,14 @@ const navigationSections = [
         title: "Boshqaruv",
         items: [
             { name: "Hodimlar", icon: UsersIcon, active: false },
-            { name: "Sozlamalar", icon: Cog6ToothIcon, active: false },
+            {
+                name: "Sozlamalar",
+                icon: Cog6ToothIcon,
+                active: false,
+                subItems: [
+                    { name: "API", icon: CommandLineIcon }
+                ]
+            },
         ]
     }
 ]
