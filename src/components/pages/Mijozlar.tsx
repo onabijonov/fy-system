@@ -96,7 +96,7 @@ export function Mijozlar() {
     };
 
     return (
-        <div className="flex flex-col gap-6 h-full animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div className="flex flex-col gap-6 h-full pt-[12px] animate-in fade-in slide-in-from-bottom-4 duration-700">
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                 {stats.map((stat, index) => (
