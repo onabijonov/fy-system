@@ -10,7 +10,8 @@ import {
     PlusIcon,
     EllipsisHorizontalIcon,
     PencilIcon,
-    TrashIcon
+    TrashIcon,
+    ArrowDownTrayIcon
 } from "@heroicons/react/24/outline"
 import { motion, AnimatePresence } from "framer-motion"
 import { useState } from "react"
@@ -47,11 +48,11 @@ export function Mijozlar() {
     ];
 
     const customers = [
-        { id: 1, name: "Aziz Rahimov", email: "aziz.r@gmail.com", phone: "+998 90 123 45 67", activity: "Tadbirkor", status: "Faol", joinDate: "12 Okt, 2023", image: "AR" },
-        { id: 2, name: "Malika Shoraxmedova", email: "malika.sh@mail.ru", phone: "+998 93 456 78 90", activity: "Dizayner", status: "Nofaol", joinDate: "15 Okt, 2023", image: "MS" },
-        { id: 3, name: "Jasur Abdullaev", email: "jasur.a@outlook.com", phone: "+998 94 789 12 34", activity: "IT Mutaxassis", status: "Faol", joinDate: "20 Okt, 2023", image: "JA" },
-        { id: 4, name: "Dilnoza Karimova", email: "dili.k@gmail.com", phone: "+998 99 321 65 43", activity: "Marketolog", status: "Nofaol", joinDate: "22 Okt, 2023", image: "DK" },
-        { id: 5, name: "Otabek Mahmudov", email: "otabek.m@gmail.com", phone: "+998 90 987 65 43", activity: "Menejer", status: "Faol", joinDate: "25 Okt, 2023", image: "OM" },
+        { id: 1, name: "Aziz Rahimov", email: "aziz.r@gmail.com", phone: "+998 90 123 45 67", activity: "Yess! Coffee - kofeynerlar tarmog‘i asoschisi", eventsCount: 12, status: "Faol", joinDate: "12 Okt, 2023", image: "AR" },
+        { id: 2, name: "Malika Shoraxmedova", email: "malika.sh@mail.ru", phone: "+998 93 456 78 90", activity: "Dizayner", eventsCount: 5, status: "Nofaol", joinDate: "15 Okt, 2023", image: "MS" },
+        { id: 3, name: "Jasur Abdullaev", email: "jasur.a@outlook.com", phone: "+998 94 789 12 34", activity: "IT Mutaxassis", eventsCount: 8, status: "Faol", joinDate: "20 Okt, 2023", image: "JA" },
+        { id: 4, name: "Dilnoza Karimova", email: "dili.k@gmail.com", phone: "+998 99 321 65 43", activity: "Marketolog", eventsCount: 2, status: "Nofaol", joinDate: "22 Okt, 2023", image: "DK" },
+        { id: 5, name: "Otabek Mahmudov", email: "otabek.m@gmail.com", phone: "+998 90 987 65 43", activity: "Menejer", eventsCount: 15, status: "Faol", joinDate: "25 Okt, 2023", image: "OM" },
     ];
 
     const toggleSelectAll = () => {
@@ -214,6 +215,7 @@ export function Mijozlar() {
                                         <th className="p-4 text-[12px] font-bold text-[#999999] uppercase tracking-wider text-left">Mijoz</th>
                                         <th className="p-4 text-[12px] font-bold text-[#999999] uppercase tracking-wider text-left">Kontakt</th>
                                         <th className="p-4 text-[12px] font-bold text-[#999999] uppercase tracking-wider text-left">Faoliyati</th>
+                                        <th className="p-4 text-[12px] font-bold text-[#999999] uppercase tracking-wider text-left">Tadbirlar</th>
                                         <th className="p-4 text-[12px] font-bold text-[#999999] uppercase tracking-wider text-left">Statusi</th>
                                         <th className="p-4 text-[12px] font-bold text-[#999999] uppercase tracking-wider text-left">A'zo bo'lgan vaqti</th>
                                         <th className="p-4 text-right pr-6">Amallar</th>
@@ -236,8 +238,14 @@ export function Mijozlar() {
                                             </td>
                                             <td className="p-4">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-10 h-10 rounded-full bg-[#F5F5F5] border border-[#E0E0E0] flex items-center justify-center text-[13px] font-bold text-[#141414]">
+                                                    <div className="relative group/avatar w-10 h-10 rounded-full bg-[#F5F5F5] border border-[#E0E0E0] flex items-center justify-center text-[13px] font-bold text-[#141414] overflow-hidden flex-shrink-0">
                                                         {customer.image}
+                                                        <div
+                                                            className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity cursor-pointer text-white"
+                                                            title="Rasmni yuklab olish"
+                                                        >
+                                                            <ArrowDownTrayIcon className="w-4 h-4" />
+                                                        </div>
                                                     </div>
                                                     <div className="flex flex-col">
                                                         <span className="text-[14px] font-bold text-[#141414]">{customer.name}</span>
@@ -249,7 +257,12 @@ export function Mijozlar() {
                                                 <span className="text-[13px] text-[#141414]">{customer.phone}</span>
                                             </td>
                                             <td className="p-4">
-                                                <span className="text-[13px] text-[#141414] font-medium">{customer.activity}</span>
+                                                <div className="max-w-[150px] 2xl:max-w-[200px] truncate" title={customer.activity}>
+                                                    <span className="text-[13px] text-[#141414] font-medium">{customer.activity}</span>
+                                                </div>
+                                            </td>
+                                            <td className="p-4">
+                                                <span className="text-[13px] text-[#141414] font-medium">{customer.eventsCount} ta</span>
                                             </td>
                                             <td className="p-4">
                                                 <span className={`inline-flex px-2.5 py-1 rounded-[6px] text-[11px] font-bold ${customer.status === 'Faol' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'
@@ -305,8 +318,14 @@ export function Mijozlar() {
 
                                         <div className="flex items-center justify-between mt-2">
                                             <div className="flex items-center gap-3">
-                                                <div className="w-12 h-12 rounded-full bg-[#F5F5F5] border border-[#E0E0E0] flex items-center justify-center text-[14px] font-bold text-[#141414]">
+                                                <div className="relative group/avatar w-12 h-12 rounded-full bg-[#F5F5F5] border border-[#E0E0E0] flex items-center justify-center text-[14px] font-bold text-[#141414] overflow-hidden flex-shrink-0">
                                                     {customer.image}
+                                                    <div
+                                                        className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity cursor-pointer text-white"
+                                                        title="Rasmni yuklab olish"
+                                                    >
+                                                        <ArrowDownTrayIcon className="w-4 h-4" />
+                                                    </div>
                                                 </div>
                                                 <div className="flex flex-col">
                                                     <span className="text-[15px] font-bold text-[#141414]">{customer.name}</span>
@@ -323,9 +342,13 @@ export function Mijozlar() {
                                                 <span className="text-[#999999]">Telefon</span>
                                                 <span className="text-[#141414] font-medium">{customer.phone}</span>
                                             </div>
+                                            <div className="flex justify-between items-center text-[13px] gap-2">
+                                                <span className="text-[#999999] flex-shrink-0">Faoliyati</span>
+                                                <span className="text-[#141414] font-medium truncate text-right" title={customer.activity}>{customer.activity}</span>
+                                            </div>
                                             <div className="flex justify-between items-center text-[13px]">
-                                                <span className="text-[#999999]">Faoliyati</span>
-                                                <span className="text-[#141414] font-medium">{customer.activity}</span>
+                                                <span className="text-[#999999]">Tadbirlar</span>
+                                                <span className="text-[#141414] font-medium">{customer.eventsCount} ta</span>
                                             </div>
                                             <div className="flex justify-between items-center text-[13px]">
                                                 <span className="text-[#999999]">Status</span>
