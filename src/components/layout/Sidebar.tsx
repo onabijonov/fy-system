@@ -25,7 +25,8 @@ import {
     EnvelopeIcon,
     DevicePhoneMobileIcon,
     PhotoIcon,
-    MicrophoneIcon
+    MicrophoneIcon,
+    Squares2X2Icon
 } from "@heroicons/react/24/outline"
 import { useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -63,6 +64,7 @@ const navigationSections = [
                 icon: BellIcon,
                 active: false,
                 subItems: [
+                    { name: "Barchasi", icon: Squares2X2Icon },
                     { name: "Telegram Bot", icon: PaperAirplaneIcon },
                     { name: "SMS", icon: ChatBubbleLeftEllipsisIcon },
                     { name: "Email", icon: EnvelopeIcon },
