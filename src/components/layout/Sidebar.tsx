@@ -72,7 +72,7 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
             className="h-screen bg-background flex flex-col border-r border-[#D0D0D0] overflow-hidden relative sticky top-0 flex-shrink-0 z-50 shadow-[4px_0_24px_rgba(0,0,0,0.02)]"
             style={{ padding: "40px 20px" }}
         >
-            <div className="flex items-center justify-between h-8 mb-[30px] px-1">
+            <div className="flex items-center justify-between h-8 mb-[20px] px-1">
                 <AnimatePresence mode="wait">
                     {!isCollapsed ? (
                         <motion.img
@@ -106,7 +106,7 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="relative mb-[30px]"
+                        className="relative mb-[20px]"
                     >
                         <input
                             type="text"
@@ -120,9 +120,9 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                 )}
             </AnimatePresence>
 
-            <nav className="flex-1 flex flex-col gap-[30px] overflow-y-hidden hover:overflow-y-auto no-scrollbar transition-all">
+            <nav className="flex-1 flex flex-col gap-[20px] overflow-y-hidden hover:overflow-y-auto no-scrollbar transition-all">
                 {filteredSections.map((section, index) => (
-                    <motion.div key={section.title} layout className="flex flex-col gap-[30px]">
+                    <motion.div key={section.title} layout className="flex flex-col gap-[20px]">
                         <div className="flex flex-col gap-[11px]">
                             <AnimatePresence>
                                 {!isCollapsed && (
