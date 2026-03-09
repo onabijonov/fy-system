@@ -47,9 +47,13 @@ const navigationSections = [
     }
 ]
 
-export function Sidebar() {
+interface SidebarProps {
+    activeItem: string;
+    onNavigate: (item: string) => void;
+}
+
+export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
     const [isCollapsed, setIsCollapsed] = useState(false)
-    const [activeItem, setActiveItem] = useState("Dashboard")
     const [searchQuery, setSearchQuery] = useState("")
 
     const filteredSections = navigationSections.map(section => ({
@@ -60,7 +64,7 @@ export function Sidebar() {
     })).filter(section => section.items.length > 0)
 
     return (
-        <aside className={`${isCollapsed ? "w-[120px]" : "w-[340px]"} h-screen bg-background p-[20px] md:p-[40px] flex flex-col gap-[30px] border-r border-[#D0D0D0] transition-all duration-300 ease-in-out`}>
+        <aside className={`${isCollapsed ? "w-[80px]" : "w-[340px]"} h-screen bg-background p-[20px] md:p-[40px] flex flex-col gap-[30px] border-r border-[#D0D0D0] transition-all duration-300 ease-in-out ${isCollapsed ? "!p-4" : ""}`}>
             <div className="flex items-center justify-between">
                 {!isCollapsed && <img src="/Sidebar/Logo.svg" alt="Biznes Klub Logo" className="w-auto h-8 animate-in fade-in duration-300" />}
                 {isCollapsed && <div className="w-8 h-8 bg-[#E7E6E4] apple-sq-10 flex items-center justify-center font-bold text-[#141414]">BK</div>}
@@ -101,7 +105,7 @@ export function Sidebar() {
                                 return (
                                     <div
                                         key={item.name}
-                                        onClick={() => setActiveItem(item.name)}
+                                        onClick={() => onNavigate(item.name)}
                                         className={`flex items-center gap-3 px-4 py-2 apple-sq-12 cursor-pointer transition-all duration-200 group ${isActive
                                             ? "bg-white border border-[#D0D0D0] text-[#141414]"
                                             : "text-[#999999] border border-transparent hover:bg-[#E7E6E4]/50"
