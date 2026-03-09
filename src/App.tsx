@@ -23,10 +23,10 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5] text-foreground flex overflow-hidden">
+    <div className="h-screen bg-[#F5F5F5] text-foreground flex overflow-hidden">
       <Sidebar activeItem={activeItem} onNavigate={setActiveItem} />
       <main className="flex-1 p-[40px] overflow-y-auto no-scrollbar bg-[#F5F5F5]">
-        <div className="max-w-[1400px] mx-auto min-h-full">
+        <div className="max-w-[1400px] mx-auto h-full">
           {renderContent()}
         </div>
       </main>
