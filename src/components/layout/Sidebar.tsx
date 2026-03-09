@@ -24,7 +24,8 @@ import {
     ChatBubbleLeftEllipsisIcon,
     EnvelopeIcon,
     DevicePhoneMobileIcon,
-    PhotoIcon
+    PhotoIcon,
+    MicrophoneIcon
 } from "@heroicons/react/24/outline"
 import { useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -56,6 +57,7 @@ const navigationSections = [
             },
             { name: "Vazifalar", icon: CheckCircleIcon, active: false },
             { name: "Analitika", icon: PresentationChartLineIcon, active: false },
+            { name: "Podkast", icon: MicrophoneIcon, active: false },
             {
                 name: "Bildirishnomalar",
                 icon: BellIcon,
