@@ -15,7 +15,9 @@ import {
     UserIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
-    ChevronDownIcon
+    ChevronDownIcon,
+    UserPlusIcon,
+    ChartBarIcon
 } from "@heroicons/react/24/outline"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -31,8 +33,8 @@ const navigationSections = [
                 icon: CreditCardIcon,
                 active: false,
                 subItems: [
-                    { name: "Lidlar", icon: UsersIcon },
-                    { name: "Pipline", icon: ArrowTrendingUpIcon }
+                    { name: "Lidlar", icon: UserPlusIcon },
+                    { name: "Pipline", icon: ChartBarIcon }
                 ]
             },
             { name: "IP Telefoniya", icon: PhoneIcon, active: false },
@@ -226,6 +228,7 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                                                                     onClick={() => onNavigate(subItem.name)}
                                                                     className={`flex items-center pl-12 pr-4 py-2 cursor-pointer transition-all duration-200 apple-sq-10 group ${isSubActive ? "text-[#141414] font-medium" : "text-[#999999] hover:text-[#141414]"}`}
                                                                 >
+                                                                    <subItem.icon className={`w-4 h-4 mr-3 transition-colors ${isSubActive ? "text-[#141414]" : "text-[#999999] group-hover:text-[#141414]"}`} strokeWidth={isSubActive ? 2.5 : 2} />
                                                                     <span className="text-[15px]">{subItem.name}</span>
                                                                 </motion.div>
                                                             )
