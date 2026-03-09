@@ -182,7 +182,7 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
             </AnimatePresence>
 
             <div className="relative flex-1 flex flex-col min-h-0 overflow-hidden -mx-4 px-4">
-                <nav className="flex-1 flex flex-col gap-[12px] overflow-y-hidden hover:overflow-y-auto no-scrollbar transition-all py-2">
+                <nav className="flex-1 flex flex-col gap-[12px] overflow-y-hidden hover:overflow-y-auto no-scrollbar transition-all pt-2 pb-[100px]">
                     {filteredSections.map((section, index) => (
                         <motion.div key={section.title} layout className="flex flex-col gap-[12px]">
                             <div className="flex flex-col gap-[8px]">
