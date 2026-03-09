@@ -129,7 +129,7 @@ export function Mijozlar() {
                         <div className="bg-[#F5F5F5] p-1 rounded-[10px] flex items-center gap-1">
                             <button
                                 onClick={() => setViewMode('list')}
-                                className={`flex items-center gap-2 px-3 py-1.5 rounded-[6px] text-[13px] font-bold transition-all ${viewMode === 'list' ? 'bg-white text-[#141414] shadow-sm' : 'text-[#999999] hover:text-[#141414]'
+                                className={`flex items-center gap-2 px-3 py-1.5 rounded-[6px] text-[13px] font-bold transition-all ${viewMode === 'list' ? 'bg-white text-[#141414]' : 'text-[#999999] hover:text-[#141414]'
                                     }`}
                             >
                                 <ListBulletIcon className="w-4 h-4" />
@@ -137,7 +137,7 @@ export function Mijozlar() {
                             </button>
                             <button
                                 onClick={() => setViewMode('grid')}
-                                className={`flex items-center gap-2 px-3 py-1.5 rounded-[6px] text-[13px] font-bold transition-all ${viewMode === 'grid' ? 'bg-white text-[#141414] shadow-sm' : 'text-[#999999] hover:text-[#141414]'
+                                className={`flex items-center gap-2 px-3 py-1.5 rounded-[6px] text-[13px] font-bold transition-all ${viewMode === 'grid' ? 'bg-white text-[#141414]' : 'text-[#999999] hover:text-[#141414]'
                                     }`}
                             >
                                 <Squares2X2Icon className="w-4 h-4" />
@@ -158,7 +158,7 @@ export function Mijozlar() {
                                         {selectedMijozlar.length} ta tanlandi
                                     </span>
                                     {selectedMijozlar.length === 1 && (
-                                        <button className="flex items-center gap-2 px-3 py-1.5 bg-white border border-[#E0E0E0] text-[#141414] rounded-[8px] text-[12px] font-bold hover:bg-[#F9F9F8] transition-colors shadow-sm">
+                                        <button className="flex items-center gap-2 px-3 py-1.5 bg-white border border-[#E0E0E0] text-[#141414] rounded-[8px] text-[12px] font-bold hover:bg-[#F9F9F8] transition-colors">
                                             <PencilIcon className="w-4 h-4" />
                                             Tahrirlash
                                         </button>
@@ -182,7 +182,7 @@ export function Mijozlar() {
                             <ArrowUpTrayIcon className="w-4 h-4" />
                             Eksport
                         </button>
-                        <button className="flex items-center gap-2 px-4 py-2 bg-[#141414] border border-[#141414] rounded-[10px] text-[13px] font-bold text-white hover:bg-[#222] transition-colors shadow-sm active:scale-95">
+                        <button className="flex items-center gap-2 px-4 py-2 bg-[#141414] border border-[#141414] rounded-[10px] text-[13px] font-bold text-white hover:bg-[#222] transition-colors active:scale-95">
                             <PlusIcon className="w-4 h-4" />
                             Yangi mijoz
                         </button>
