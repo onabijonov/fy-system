@@ -25,11 +25,19 @@ function App() {
   return (
     <div className="h-screen bg-[#F5F5F5] text-foreground flex overflow-hidden">
       <Sidebar activeItem={activeItem} onNavigate={setActiveItem} />
-      <main className="flex-1 p-[40px] overflow-y-auto no-scrollbar bg-[#F5F5F5]">
-        <div className="max-w-[1400px] mx-auto h-full">
-          {renderContent()}
-        </div>
-      </main>
+      <div className="flex-1 flex flex-col h-screen">
+        <header className="px-[40px] pt-[29px]">
+          <div className="h-[54px] bg-white border border-[#D0D0D0] apple-sq-12 px-[12px] flex items-center shadow-sm">
+            {/* Top Bar Content */}
+            <div className="text-[18px] font-semibold text-[#141414]">{activeItem}</div>
+          </div>
+        </header>
+        <main className="flex-1 p-[40px] pt-[20px] overflow-y-auto no-scrollbar">
+          <div className="max-w-[1400px] mx-auto h-full">
+            {renderContent()}
+          </div>
+        </main>
+      </div>
     </div>
   )
 }
