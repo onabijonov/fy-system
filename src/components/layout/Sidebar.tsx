@@ -71,7 +71,12 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                 width: isCollapsed ? 80 : 340,
                 padding: isCollapsed ? "16px" : "40px 20px"
             }}
-            transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+            transition={{
+                type: "spring",
+                stiffness: 260,
+                damping: 32,
+                mass: 1
+            }}
             className="h-screen bg-background flex flex-col gap-[30px] border-r border-[#D0D0D0] overflow-hidden relative"
         >
             <div className={`flex items-center ${isCollapsed ? "justify-center" : "justify-between"} mb-2`}>
