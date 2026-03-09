@@ -6,7 +6,8 @@ import { motion, AnimatePresence } from "framer-motion"
 import {
   BellIcon,
   MagnifyingGlassIcon,
-  ChevronDownIcon
+  ChevronDownIcon,
+  Cog6ToothIcon
 } from "@heroicons/react/24/outline"
 
 function App() {
@@ -36,19 +37,19 @@ function App() {
       <div className="flex-1 flex flex-col h-screen bg-white overflow-hidden rounded-tl-[26px]">
         {/* Kontent bo'limi (Child container) */}
         <div className="flex-1 flex flex-col relative min-h-0">
-          <header className="px-[16px] pt-[15px] flex-shrink-0">
-            <div className="h-[54px] bg-white apple-sq-12 flex items-center justify-between px-0">
+          <header className="px-[24px] pt-[15px] flex-shrink-0">
+            <div className="h-[54px] bg-white apple-sq-12 flex items-center justify-between px-[16px]">
               {/* Chap taraf: Bo'lim nomi */}
               <div className="text-[20px] font-bold text-[#141414]">{activeItem}</div>
 
-              {/* O'ng taraf: Qidiruv, Bildirishnoma, Til */}
-              <div className="flex items-center gap-[24px]">
+              {/* O'ng taraf: Qidiruv, Bildirishnoma, Til, Sozlamalar */}
+              <div className="flex items-center gap-[12px]">
                 {/* Qidiruv (Uzun search placeholder) */}
                 <div className="relative w-[320px]">
                   <MagnifyingGlassIcon className="absolute left-[12px] top-1/2 -translate-y-1/2 w-5 h-5 text-[#999999]" />
                   <input
                     type="text"
-                    placeholder="Tizim bo'ylab qidirish, ma'lumot topish..."
+                    placeholder="Tizim bo'ylab qidirish..."
                     className="w-full bg-[#F3F2F0] border-none rounded-xl py-[10px] pl-[40px] pr-[16px] text-sm text-[#141414] placeholder:text-[#999999] focus:ring-0 outline-none"
                   />
                 </div>
@@ -94,6 +95,11 @@ function App() {
                     )}
                   </AnimatePresence>
                 </div>
+
+                {/* Sozlamalar */}
+                <button className="p-2 hover:bg-[#F3F2F0] rounded-xl transition-colors group">
+                  <Cog6ToothIcon className="w-6 h-6 text-[#141414]" />
+                </button>
               </div>
             </div>
           </header>
