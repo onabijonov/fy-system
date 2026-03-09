@@ -161,7 +161,7 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                 </AnimatePresence>
                 <button
                     onClick={() => setIsCollapsed(!isCollapsed)}
-                    className="p-2 hover:bg-[#E7E6E4] rounded-[4px] transition-colors group flex items-center justify-center flex-shrink-0"
+                    className="p-2 hover:bg-[#E7E6E4] rounded-[8px] transition-colors group flex items-center justify-center flex-shrink-0"
                 >
                     {isCollapsed ? (
                         <ChevronRightIcon className="w-5 h-5 text-[#999999] group-hover:text-[#141414]" strokeWidth={2} />

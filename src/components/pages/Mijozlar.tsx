@@ -106,17 +106,17 @@ export function Mijozlar() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: index * 0.1 }}
                         whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                        className="bg-white border border-[#F0F0F0] rounded-[4px] p-5 flex flex-col gap-4 border-b-2 hover:border-b-[#141414] transition-colors cursor-default"
+                        className="bg-white border border-[#F0F0F0] rounded-[8px] p-5 flex flex-col gap-4 border-b-2 hover:border-b-[#141414] transition-colors cursor-default"
                     >
                         <div className="flex items-center justify-between">
-                            <div className={`w-12 h-12 ${stat.bg} rounded-[4px] flex items-center justify-center`}>
+                            <div className={`w-12 h-12 ${stat.bg} rounded-[8px] flex items-center justify-center`}>
                                 <stat.icon className={`w-6 h-6 ${stat.color}`} />
                             </div>
                             <motion.div
                                 initial={{ scale: 0.8 }}
                                 animate={{ scale: 1 }}
                                 transition={{ delay: 0.5 + (index * 0.1) }}
-                                className="flex items-center gap-1.5 bg-white border border-[#141414] px-3 py-1 rounded-[4px]"
+                                className="flex items-center gap-1.5 bg-white border border-[#141414] px-3 py-1 rounded-[8px]"
                             >
                                 <ArrowUpRightIcon className="w-3.5 h-3.5 text-[#141414] stroke-[3px]" />
                                 <span className="text-[13px] font-bold text-[#141414]">{stat.growth}</span>
@@ -131,15 +131,15 @@ export function Mijozlar() {
             </div>
 
             {/* Toolbar & Table Container */}
-            <div className="bg-white border border-[#F0F0F0] rounded-[4px] flex flex-col overflow-hidden">
+            <div className="bg-white border border-[#F0F0F0] rounded-[8px] flex flex-col overflow-hidden">
                 {/* Toolbar */}
                 <div className="p-4 border-b border-[#F0F0F0] flex flex-wrap items-center justify-between gap-4 bg-white relative">
                     <div className="flex items-center gap-4">
                         {/* View Switcher */}
-                        <div className="bg-[#F5F5F5] p-1 rounded-[4px] flex items-center gap-1">
+                        <div className="bg-[#F5F5F5] p-1 rounded-[8px] flex items-center gap-1">
                             <button
                                 onClick={() => setViewMode('list')}
-                                className={`flex items-center gap-2 px-3 py-1.5 rounded-[4px] text-[13px] font-bold transition-all ${viewMode === 'list' ? 'bg-white text-[#141414]' : 'text-[#999999] hover:text-[#141414]'
+                                className={`flex items-center gap-2 px-3 py-1.5 rounded-[8px] text-[13px] font-bold transition-all ${viewMode === 'list' ? 'bg-white text-[#141414]' : 'text-[#999999] hover:text-[#141414]'
                                     }`}
                             >
                                 <ListBulletIcon className="w-4 h-4" />
@@ -147,7 +147,7 @@ export function Mijozlar() {
                             </button>
                             <button
                                 onClick={() => setViewMode('grid')}
-                                className={`flex items-center gap-2 px-3 py-1.5 rounded-[4px] text-[13px] font-bold transition-all ${viewMode === 'grid' ? 'bg-white text-[#141414]' : 'text-[#999999] hover:text-[#141414]'
+                                className={`flex items-center gap-2 px-3 py-1.5 rounded-[8px] text-[13px] font-bold transition-all ${viewMode === 'grid' ? 'bg-white text-[#141414]' : 'text-[#999999] hover:text-[#141414]'
                                     }`}
                             >
                                 <Squares2X2Icon className="w-4 h-4" />
@@ -168,12 +168,12 @@ export function Mijozlar() {
                                         {selectedMijozlar.length} ta tanlandi
                                     </span>
                                     {selectedMijozlar.length === 1 && (
-                                        <button className="flex items-center gap-2 px-3 py-1.5 bg-white border border-[#E0E0E0] text-[#141414] rounded-[4px] text-[12px] font-bold hover:bg-[#F9F9F8] transition-colors">
+                                        <button className="flex items-center gap-2 px-3 py-1.5 bg-white border border-[#E0E0E0] text-[#141414] rounded-[8px] text-[12px] font-bold hover:bg-[#F9F9F8] transition-colors">
                                             <PencilIcon className="w-4 h-4" />
                                             Tahrirlash
                                         </button>
                                     )}
-                                    <button className="flex items-center gap-2 px-3 py-1.5 bg-red-50 text-red-600 rounded-[4px] text-[12px] font-bold hover:bg-red-100 transition-colors">
+                                    <button className="flex items-center gap-2 px-3 py-1.5 bg-red-50 text-red-600 rounded-[8px] text-[12px] font-bold hover:bg-red-100 transition-colors">
                                         <TrashIcon className="w-4 h-4" />
                                         O'chirish
                                     </button>
@@ -184,15 +184,15 @@ export function Mijozlar() {
 
                     {/* Actions */}
                     <div className="flex items-center gap-3">
-                        <button className="flex items-center gap-2 px-4 py-2 bg-white border border-[#E0E0E0] rounded-[4px] text-[13px] font-bold text-[#141414] hover:bg-[#F9F9F8] transition-colors">
+                        <button className="flex items-center gap-2 px-4 py-2 bg-white border border-[#E0E0E0] rounded-[8px] text-[13px] font-bold text-[#141414] hover:bg-[#F9F9F8] transition-colors">
                             <FunnelIcon className="w-4 h-4" />
                             Filtr
                         </button>
-                        <button className="flex items-center gap-2 px-4 py-2 bg-white border border-[#E0E0E0] rounded-[4px] text-[13px] font-bold text-[#141414] hover:bg-[#F9F9F8] transition-colors">
+                        <button className="flex items-center gap-2 px-4 py-2 bg-white border border-[#E0E0E0] rounded-[8px] text-[13px] font-bold text-[#141414] hover:bg-[#F9F9F8] transition-colors">
                             <ArrowUpTrayIcon className="w-4 h-4" />
                             Eksport
                         </button>
-                        <button className="flex items-center gap-2 px-4 py-2 bg-[#141414] border border-[#141414] rounded-[4px] text-[13px] font-bold text-white hover:bg-[#222] transition-colors active:scale-95">
+                        <button className="flex items-center gap-2 px-4 py-2 bg-[#141414] border border-[#141414] rounded-[8px] text-[13px] font-bold text-white hover:bg-[#222] transition-colors active:scale-95">
                             <PlusIcon className="w-4 h-4" />
                             Yangi mijoz
                         </button>
@@ -272,7 +272,7 @@ export function Mijozlar() {
                                                 <span className="text-[13px] text-[#141414] font-medium">{customer.eventsCount} ta</span>
                                             </td>
                                             <td className="p-4">
-                                                <span className={`inline-flex px-2.5 py-1 rounded-[4px] text-[11px] font-bold ${customer.status === 'Faol' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'
+                                                <span className={`inline-flex px-2.5 py-1 rounded-[8px] text-[11px] font-bold ${customer.status === 'Faol' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'
                                                     }`}>
                                                     {customer.status}
                                                 </span>
@@ -282,13 +282,13 @@ export function Mijozlar() {
                                             </td>
                                             <td className="p-4 text-right pr-6">
                                                 <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                    <button className="p-2 hover:bg-[#F5F5F5] hover:text-[#141414] rounded-[4px] transition-colors text-[#999999]" title="Tahrirlash">
+                                                    <button className="p-2 hover:bg-[#F5F5F5] hover:text-[#141414] rounded-[8px] transition-colors text-[#999999]" title="Tahrirlash">
                                                         <PencilIcon className="w-4.5 h-4.5" />
                                                     </button>
-                                                    <button className="p-2 hover:bg-red-50 hover:text-red-600 rounded-[4px] transition-colors text-[#999999]" title="O'chirish">
+                                                    <button className="p-2 hover:bg-red-50 hover:text-red-600 rounded-[8px] transition-colors text-[#999999]" title="O'chirish">
                                                         <TrashIcon className="w-4.5 h-4.5" />
                                                     </button>
-                                                    <button className="p-2 hover:bg-[#F3F2F0] rounded-[4px] transition-colors text-[#999999]">
+                                                    <button className="p-2 hover:bg-[#F3F2F0] rounded-[8px] transition-colors text-[#999999]">
                                                         <EllipsisHorizontalIcon className="w-5 h-5" />
                                                     </button>
                                                 </div>
@@ -310,7 +310,7 @@ export function Mijozlar() {
                                     <motion.div
                                         key={customer.id}
                                         variants={rowVariants}
-                                        className={`bg-white border border-[#F0F0F0] rounded-[4px] p-4 flex flex-col gap-4 relative group transition-all hover:border-[#141414] ${selectedMijozlar.includes(customer.id) ? 'bg-[#F9F9F8] border-[#141414]' : ''
+                                        className={`bg-white border border-[#F0F0F0] rounded-[8px] p-4 flex flex-col gap-4 relative group transition-all hover:border-[#141414] ${selectedMijozlar.includes(customer.id) ? 'bg-[#F9F9F8] border-[#141414]' : ''
                                             }`}
                                     >
                                         <div className="absolute top-3 left-3">
@@ -339,7 +339,7 @@ export function Mijozlar() {
                                                     <span className="text-[13px] text-[#999999] mt-0.5 break-all">{customer.email}</span>
                                                 </div>
                                             </div>
-                                            <button className="p-2 hover:bg-[#F5F5F5] rounded-[4px] transition-colors text-[#999999] flex-shrink-0">
+                                            <button className="p-2 hover:bg-[#F5F5F5] rounded-[8px] transition-colors text-[#999999] flex-shrink-0">
                                                 <EllipsisHorizontalIcon className="w-5 h-5" />
                                             </button>
                                         </div>
@@ -359,7 +359,7 @@ export function Mijozlar() {
                                             </div>
                                             <div className="flex justify-between items-center text-[13px]">
                                                 <span className="text-[#999999]">Status</span>
-                                                <span className={`px-2 py-0.5 rounded-[4px] text-[11px] font-bold ${customer.status === 'Faol' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'
+                                                <span className={`px-2 py-0.5 rounded-[8px] text-[11px] font-bold ${customer.status === 'Faol' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'
                                                     }`}>
                                                     {customer.status}
                                                 </span>
@@ -367,11 +367,11 @@ export function Mijozlar() {
                                         </div>
 
                                         <div className="flex items-center gap-2 mt-auto pt-2">
-                                            <button className="flex-1 flex items-center justify-center gap-2 py-2 bg-white border border-[#E0E0E0] rounded-[4px] text-[12px] font-bold text-[#141414] hover:bg-[#F9F9F8] transition-colors">
+                                            <button className="flex-1 flex items-center justify-center gap-2 py-2 bg-white border border-[#E0E0E0] rounded-[8px] text-[12px] font-bold text-[#141414] hover:bg-[#F9F9F8] transition-colors">
                                                 <PencilIcon className="w-3.5 h-3.5" />
                                                 Tahrirlash
                                             </button>
-                                            <button className="w-10 h-9 flex items-center justify-center bg-red-50 rounded-[4px] text-red-600 hover:bg-red-100 transition-colors">
+                                            <button className="w-10 h-9 flex items-center justify-center bg-red-50 rounded-[8px] text-red-600 hover:bg-red-100 transition-colors">
                                                 <TrashIcon className="w-4 h-4" />
                                             </button>
                                         </div>
