@@ -273,7 +273,11 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                                                                         className={`flex items-center pl-12 pr-4 py-2 cursor-pointer transition-all duration-200 apple-sq-10 group ${isSubActive ? "text-[#141414] font-medium" : "text-[#999999] hover:text-[#141414]"}`}
                                                                     >
                                                                         <subItem.icon className={`w-4 h-4 mr-3 transition-colors ${isSubActive ? "text-[#141414]" : "text-[#999999] group-hover:text-[#141414]"}`} strokeWidth={isSubActive ? 2.5 : 2} />
-                                                                        <span className="text-[15px]">{subItem.name}</span>
+                                                                        <span className="flex-1 truncate">{subItem.name}</span>
+                                                                        {/* Notification Dots for specific items */}
+                                                                        {(subItem.name === "Sotuv bo'limi" || subItem.name === "To'lovlar") && (
+                                                                            <span className="w-1.5 h-1.5 bg-[#FF3B30] rounded-full shadow-[0_0_8px_rgba(255,59,48,0.4)] flex-shrink-0" />
+                                                                        )}
                                                                     </motion.div>
                                                                 )
                                                             })}
