@@ -38,14 +38,14 @@ export function Mijozlar() {
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                 {stats.map((stat, index) => (
-                    <div key={index} className="bg-white border border-[#F0F0F0] apple-sq-16 p-5 flex flex-col gap-4 shadow-sm hover:shadow-md transition-shadow">
+                    <div key={index} className="bg-white border border-[#F0F0F0] rounded-[12px] p-5 flex flex-col gap-4 transition-all">
                         <div className="flex items-center justify-between">
                             <div className={`w-12 h-12 ${stat.bg} rounded-xl flex items-center justify-center`}>
                                 <stat.icon className={`w-6 h-6 ${stat.color}`} />
                             </div>
-                            <div className="flex items-center gap-1 bg-green-50 px-2 py-1 rounded-full">
-                                <ArrowUpRightIcon className="w-3 h-3 text-green-600" />
-                                <span className="text-[11px] font-bold text-green-600">{stat.growth}</span>
+                            <div className="flex items-center gap-1.5 bg-white border-[2px] border-[#999999]/30 px-3 py-1 rounded-full">
+                                <ArrowUpRightIcon className="w-3.5 h-3.5 text-green-600 stroke-[3px]" />
+                                <span className="text-[13px] font-bold text-green-600">{stat.growth}</span>
                             </div>
                         </div>
                         <div className="flex flex-col gap-1">
