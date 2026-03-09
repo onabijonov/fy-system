@@ -2,11 +2,21 @@ import {
     UsersIcon,
     UserPlusIcon,
     TicketIcon,
-    ArrowUpRightIcon
+    ArrowUpRightIcon,
+    ListBulletIcon,
+    Squares2X2Icon,
+    FunnelIcon,
+    ArrowUpTrayIcon,
+    PlusIcon,
+    EllipsisHorizontalIcon
 } from "@heroicons/react/24/outline"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
+import { useState } from "react"
 
 export function Mijozlar() {
+    const [viewMode, setViewMode] = useState<'list' | 'grid'>('list')
+    const [selectedMijozlar, setSelectedMijozlar] = useState<number[]>([])
+
     const stats = [
         {
             title: "Jami Mijozlar soni",
@@ -33,6 +43,30 @@ export function Mijozlar() {
             bg: "bg-[#F5F5F5]"
         }
     ];
+
+    const customers = [
+        { id: 1, name: "Aziz Rahimov", email: "aziz.r@gmail.com", phone: "+998 90 123 45 67", activity: "Tadbirkor", status: "Aktiv", joinDate: "12 Okt, 2023", image: "AR" },
+        { id: 2, name: "Malika Shoraxmedova", email: "malika.sh@mail.ru", phone: "+998 93 456 78 90", activity: "Dizayner", status: "Kutishda", joinDate: "15 Okt, 2023", image: "MS" },
+        { id: 3, name: "Jasur Abdullaev", email: "jasur.a@outlook.com", phone: "+998 94 789 12 34", activity: "IT Mutaxassis", status: "Aktiv", joinDate: "20 Okt, 2023", image: "JA" },
+        { id: 4, name: "Dilnoza Karimova", email: "dili.k@gmail.com", phone: "+998 99 321 65 43", activity: "Marketolog", status: "Nofaol", joinDate: "22 Okt, 2023", image: "DK" },
+        { id: 5, name: "Otabek Mahmudov", email: "otabek.m@gmail.com", phone: "+998 90 987 65 43", activity: "Menejer", status: "Aktiv", joinDate: "25 Okt, 2023", image: "OM" },
+    ];
+
+    const toggleSelectAll = () => {
+        if (selectedMijozlar.length === customers.length) {
+            setSelectedMijozlar([])
+        } else {
+            setSelectedMijozlar(customers.map(c => c.id))
+        }
+    }
+
+    const toggleSelect = (id: number) => {
+        if (selectedMijozlar.includes(id)) {
+            setSelectedMijozlar(selectedMijozlar.filter(i => i !== id))
+        } else {
+            setSelectedMijozlar([...selectedMijozlar, id])
+        }
+    }
 
     return (
         <div className="flex flex-col gap-6 h-full animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -69,19 +103,116 @@ export function Mijozlar() {
                 ))}
             </div>
 
-            {/* Bo'sh holat placeholderi */}
-            <div className="flex-1 border-2 border-dashed border-[#F0F0F0] rounded-[32px] flex items-center justify-center p-12 bg-[#FBFBFB]">
-                <div className="text-center flex flex-col items-center gap-4 text-[#999999]">
-                    <div className="w-16 h-16 bg-white border border-[#F0F0F0] rounded-2xl flex items-center justify-center shadow-sm">
-                        <UsersIcon className="w-8 h-8 opacity-20" />
+            {/* Toolbar & Table Container */}
+            <div className="bg-white border border-[#F0F0F0] rounded-[16px] flex flex-col overflow-hidden">
+                {/* Toolbar */}
+                <div className="p-4 border-b border-[#F0F0F0] flex flex-wrap items-center justify-between gap-4">
+                    {/* View Switcher */}
+                    <div className="bg-[#F5F5F5] p-1 rounded-xl flex items-center gap-1">
+                        <button
+                            onClick={() => setViewMode('list')}
+                            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-[13px] font-bold transition-all ${viewMode === 'list' ? 'bg-white text-[#141414] shadow-sm' : 'text-[#999999] hover:text-[#141414]'
+                                }`}
+                        >
+                            <ListBulletIcon className="w-4 h-4" />
+                            Ro'yxat
+                        </button>
+                        <button
+                            onClick={() => setViewMode('grid')}
+                            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-[13px] font-bold transition-all ${viewMode === 'grid' ? 'bg-white text-[#141414] shadow-sm' : 'text-[#999999] hover:text-[#141414]'
+                                }`}
+                        >
+                            <Squares2X2Icon className="w-4 h-4" />
+                            Setka
+                        </button>
                     </div>
-                    <div className="flex flex-col gap-1">
-                        <h3 className="font-bold text-[#141414] text-[18px]">Mijozlar ro'yxati bo'sh</h3>
-                        <p className="text-[14px]">Hozircha tizimda hech qanday mijoz ma'lumoti mavjud emas.</p>
+
+                    {/* Actions */}
+                    <div className="flex items-center gap-3">
+                        <button className="flex items-center gap-2 px-4 py-2 bg-white border border-[#E0E0E0] rounded-xl text-[13px] font-bold text-[#141414] hover:bg-[#F9F9F8] transition-colors">
+                            <FunnelIcon className="w-4 h-4" />
+                            Filtr
+                        </button>
+                        <button className="flex items-center gap-2 px-4 py-2 bg-white border border-[#E0E0E0] rounded-xl text-[13px] font-bold text-[#141414] hover:bg-[#F9F9F8] transition-colors">
+                            <ArrowUpTrayIcon className="w-4 h-4" />
+                            Eksport
+                        </button>
+                        <button className="flex items-center gap-2 px-4 py-2 bg-[#141414] border border-[#141414] rounded-xl text-[13px] font-bold text-white hover:bg-[#222] transition-colors shadow-sm active:scale-95">
+                            <PlusIcon className="w-4 h-4" />
+                            Yangi mijoz
+                        </button>
                     </div>
-                    <button className="mt-4 bg-[#141414] text-white px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-[#222] transition-colors">
-                        Yangi mijoz qo'shish
-                    </button>
+                </div>
+
+                {/* Table Content */}
+                <div className="overflow-x-auto no-scrollbar">
+                    <table className="w-full border-collapse">
+                        <thead>
+                            <tr className="bg-[#FBFBFB] border-b border-[#F0F0F0]">
+                                <th className="p-4 text-left w-12">
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedMijozlar.length === customers.length}
+                                        onChange={toggleSelectAll}
+                                        className="w-4 h-4 rounded border-[#D0D0D0] text-[#141414] focus:ring-0 cursor-pointer"
+                                    />
+                                </th>
+                                <th className="p-4 text-[12px] font-bold text-[#999999] uppercase tracking-wider text-left">Mijoz</th>
+                                <th className="p-4 text-[12px] font-bold text-[#999999] uppercase tracking-wider text-left">Kontakt</th>
+                                <th className="p-4 text-[12px] font-bold text-[#999999] uppercase tracking-wider text-left">Faoliyati</th>
+                                <th className="p-4 text-[12px] font-bold text-[#999999] uppercase tracking-wider text-left">Statusi</th>
+                                <th className="p-4 text-[12px] font-bold text-[#999999] uppercase tracking-wider text-left">A'zo bo'lgan vaqti</th>
+                                <th className="p-4 text-right"></th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-[#F0F0F0]">
+                            {customers.map((customer) => (
+                                <tr key={customer.id} className="hover:bg-[#FBFBFB] transition-colors group">
+                                    <td className="p-4">
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedMijozlar.includes(customer.id)}
+                                            onChange={() => toggleSelect(customer.id)}
+                                            className="w-4 h-4 rounded border-[#D0D0D0] text-[#141414] focus:ring-0 cursor-pointer"
+                                        />
+                                    </td>
+                                    <td className="p-4">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 rounded-full bg-[#F5F5F5] border border-[#E0E0E0] flex items-center justify-center text-[13px] font-bold text-[#141414]">
+                                                {customer.image}
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="text-[14px] font-bold text-[#141414]">{customer.name}</span>
+                                                <span className="text-[11px] text-[#999999]">{customer.email}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="p-4">
+                                        <span className="text-[13px] text-[#141414]">{customer.phone}</span>
+                                    </td>
+                                    <td className="p-4">
+                                        <span className="text-[13px] text-[#141414] font-medium">{customer.activity}</span>
+                                    </td>
+                                    <td className="p-4">
+                                        <span className={`inline-flex px-2.5 py-1 rounded-lg text-[11px] font-bold ${customer.status === 'Aktiv' ? 'bg-green-50 text-green-600' :
+                                                customer.status === 'Kutishda' ? 'bg-yellow-50 text-yellow-600' :
+                                                    'bg-red-50 text-red-600'
+                                            }`}>
+                                            {customer.status}
+                                        </span>
+                                    </td>
+                                    <td className="p-4">
+                                        <span className="text-[13px] text-[#999999]">{customer.joinDate}</span>
+                                    </td>
+                                    <td className="p-4 text-right">
+                                        <button className="p-2 hover:bg-[#F3F2F0] rounded-lg transition-colors opacity-0 group-hover:opacity-100">
+                                            <EllipsisHorizontalIcon className="w-5 h-5 text-[#999999]" />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
