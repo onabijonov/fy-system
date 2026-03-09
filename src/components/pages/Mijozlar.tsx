@@ -19,17 +19,24 @@ const activeCustomers = [
 export function Mijozlar() {
     return (
         <div className="flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            {/* Aktiv Mijozlar Section (Instagram Stories style) */}
-            <div className="flex flex-col gap-4">
-                <h3 className="text-[14px] font-bold text-[#141414] px-1">Eng aktiv mijozlar</h3>
+            {/* Aktiv Mijozlar Section (Overlapping Circles) */}
+            <div className="flex flex-col gap-5">
+                <h3 className="text-[20px] font-bold text-[#141414] px-1">Eng aktiv mijozlar</h3>
 
-                <div className="flex gap-5 overflow-x-auto no-scrollbar pb-2 px-1">
-                    {activeCustomers.map((customer) => (
-                        <div key={customer.id} className="flex flex-col items-center gap-2 group cursor-pointer flex-shrink-0">
+                <div className="flex overflow-x-auto no-scrollbar pb-4 px-1 pl-4">
+                    {activeCustomers.map((customer, index) => (
+                        <div
+                            key={customer.id}
+                            className="flex flex-col items-center gap-3 group cursor-pointer flex-shrink-0 transition-all duration-300 hover:z-20 relative"
+                            style={{
+                                marginLeft: index === 0 ? 0 : '-18px',
+                                zIndex: activeCustomers.length - index
+                            }}
+                        >
                             {/* Avatar with gradient border */}
-                            <div className="relative p-[2px] rounded-full bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] group-hover:scale-105 transition-transform duration-300">
+                            <div className="relative p-[2.5px] rounded-full bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] group-hover:-translate-y-2 transition-transform duration-300 shadow-lg">
                                 <div className="p-0.5 bg-white rounded-full">
-                                    <div className={`w-[68px] h-[68px] rounded-full ${customer.color} flex items-center justify-center font-bold text-lg border border-[#F0F0F0]`}>
+                                    <div className={`w-[72px] h-[72px] rounded-full ${customer.color} flex items-center justify-center font-bold text-xl border border-[#F0F0F0]`}>
                                         {customer.name.split(' ').map(n => n[0]).join('')}
                                     </div>
                                 </div>
@@ -37,10 +44,12 @@ export function Mijozlar() {
                                 <div className="absolute bottom-1 right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
                             </div>
 
-                            {/* Name */}
-                            <span className="text-[11px] font-bold text-[#141414] max-w-[80px] text-center truncate leading-tight">
-                                {customer.name}
-                            </span>
+                            {/* Name (2 lines) */}
+                            <div className="w-[85px] text-center px-2">
+                                <span className="text-[11px] font-bold text-[#141414] leading-[1.3] block break-words">
+                                    {customer.name}
+                                </span>
+                            </div>
                         </div>
                     ))}
                 </div>
