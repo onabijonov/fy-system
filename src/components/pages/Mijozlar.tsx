@@ -9,11 +9,6 @@ const activeCustomers = [
     { id: 8, name: "Nigora Aliyeva", color: "bg-teal-100 text-teal-600" },
     { id: 9, name: "Bobur Mirzo", color: "bg-yellow-100 text-yellow-600" },
     { id: 10, name: "Shahlo G'ulomova", color: "bg-cyan-100 text-cyan-600" },
-    { id: 11, name: "Sherzod Orifov", color: "bg-emerald-100 text-emerald-600" },
-    { id: 12, name: "Madina Tursunova", color: "bg-rose-100 text-rose-600" },
-    { id: 13, name: "Rustam Xoliqov", color: "bg-lime-100 text-lime-600" },
-    { id: 14, name: "Zaynab Qosimova", color: "bg-violet-100 text-violet-600" },
-    { id: 15, name: "Sardor Azimov", color: "bg-amber-100 text-amber-600" },
 ];
 
 export function Mijozlar() {
@@ -46,7 +41,7 @@ export function Mijozlar() {
 
                             {/* Name (2 lines) */}
                             <div className="w-[85px] text-center px-2">
-                                <span className="text-[11px] font-bold text-[#141414] leading-[1.3] block break-words">
+                                <span className="text-[11px] font-normal text-[#141414] leading-[1.3] block break-words">
                                     {customer.name}
                                 </span>
                             </div>
