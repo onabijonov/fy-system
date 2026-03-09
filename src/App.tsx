@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Sidebar } from "./components/layout/Sidebar"
 import { Dashboard } from "./components/pages/Dashboard"
 import { Mijozlar } from "./components/pages/Mijozlar"
+import { motion, AnimatePresence } from "framer-motion"
 import {
   BellIcon,
   MagnifyingGlassIcon,
@@ -10,6 +11,8 @@ import {
 
 function App() {
   const [activeItem, setActiveItem] = useState("Dashboard")
+  const [currentLang, setCurrentLang] = useState("uz")
+  const [isLangOpen, setIsLangOpen] = useState(false)
 
   const renderContent = () => {
     switch (activeItem) {
@@ -57,12 +60,39 @@ function App() {
                 </button>
 
                 {/* Til o'zgartirish */}
-                <div className="flex items-center gap-[6px] px-3 py-2 bg-[#F3F2F0] rounded-xl cursor-pointer hover:bg-[#E7E6E4] transition-colors">
-                  <div className="w-5 h-5 rounded-full overflow-hidden flex-shrink-0">
-                    <img src="https://flagcdn.com/uz.svg" alt="UZ" className="w-full h-full object-cover" />
-                  </div>
-                  <span className="text-sm font-semibold text-[#141414]">UZ</span>
-                  <ChevronDownIcon className="w-4 h-4 text-[#999999]" />
+                <div className="relative">
+                  <button
+                    onClick={() => setIsLangOpen(!isLangOpen)}
+                    className="flex items-center gap-[6px] px-3 py-2 bg-[#F3F2F0] rounded-xl cursor-pointer hover:bg-[#E7E6E4] transition-colors"
+                  >
+                    <span className="text-sm font-semibold text-[#141414] uppercase">{currentLang}</span>
+                    <ChevronDownIcon className={`w-4 h-4 text-[#999999] transition-transform duration-200 ${isLangOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  <AnimatePresence>
+                    {isLangOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        className="absolute top-full right-0 mt-2 w-[80px] bg-white border border-[#D0D0D0] rounded-xl shadow-lg overflow-hidden z-50"
+                      >
+                        {['uz', 'ru', 'en'].map((lang) => (
+                          <button
+                            key={lang}
+                            onClick={() => {
+                              setCurrentLang(lang);
+                              setIsLangOpen(false);
+                            }}
+                            className={`w-full px-4 py-2 text-sm font-medium hover:bg-[#F3F2F0] transition-colors text-left uppercase ${currentLang === lang ? 'text-primary bg-[#F3F2F0]' : 'text-[#141414]'
+                              }`}
+                          >
+                            {lang}
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
             </div>
