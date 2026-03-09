@@ -91,7 +91,7 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                     className={`p-2 hover:bg-[#E7E6E4] rounded-md transition-colors group ${isCollapsed ? "w-10 h-10 flex items-center justify-center" : ""}`}
                 >
                     {isCollapsed ? (
-                        <ChevronRightIcon className="w-6 h-6 text-[#999999] group-hover:text-[#141414]" strokeWidth={2.5} />
+                        <ChevronRightIcon className="w-5 h-5 text-[#999999] group-hover:text-[#141414]" strokeWidth={2} />
                     ) : (
                         <ChevronLeftIcon className="w-5 h-5 text-[#999999] group-hover:text-[#141414]" strokeWidth={2} />
                     )}
