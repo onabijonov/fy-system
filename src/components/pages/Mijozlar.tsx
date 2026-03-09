@@ -221,13 +221,13 @@ export function Mijozlar() {
                                                 className="w-4 h-4 rounded border-[#D0D0D0] text-[#141414] focus:ring-0 cursor-pointer"
                                             />
                                         </th>
-                                        <th className="p-4 text-[13px] font-semibold text-[#141414] text-left">Mijoz</th>
-                                        <th className="p-4 text-[13px] font-semibold text-[#141414] text-left">Kontakt</th>
-                                        <th className="p-4 text-[13px] font-semibold text-[#141414] text-left">Faoliyati</th>
-                                        <th className="p-4 text-[13px] font-semibold text-[#141414] text-left">Tadbirlar</th>
-                                        <th className="p-4 text-[13px] font-semibold text-[#141414] text-left">Statusi</th>
-                                        <th className="p-4 text-[13px] font-semibold text-[#141414] text-left">A'zo bo'lgan vaqti</th>
-                                        <th className="p-4 text-[13px] font-semibold text-[#141414] text-right pr-6">Amallar</th>
+                                        <th className="p-4 text-[14px] font-semibold text-[#141414] text-left">Mijoz</th>
+                                        <th className="p-4 text-[14px] font-semibold text-[#141414] text-left">Kontakt</th>
+                                        <th className="p-4 text-[14px] font-semibold text-[#141414] text-left">Faoliyati</th>
+                                        <th className="p-4 text-[14px] font-semibold text-[#141414] text-left">Tadbirlar</th>
+                                        <th className="p-4 text-[14px] font-semibold text-[#141414] text-left">Statusi</th>
+                                        <th className="p-4 text-[14px] font-semibold text-[#141414] text-left">A'zo bo'lgan vaqti</th>
+                                        <th className="p-4 text-[14px] font-semibold text-[#141414] text-right pr-6">Amallar</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-[#F0F0F0]">
