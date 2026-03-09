@@ -54,6 +54,7 @@ const navigationSections = [
     {
         title: "Boshqaruv",
         items: [
+            { name: "Hodimlar", icon: UsersIcon, active: false },
             { name: "Sozlamalar", icon: Cog6ToothIcon, active: false },
         ]
     }
