@@ -189,90 +189,167 @@ export function Mijozlar() {
                     </div>
                 </div>
 
-                {/* Table Content */}
+                {/* View Content */}
                 <div className="overflow-x-auto no-scrollbar">
-                    <motion.table
-                        className="w-full border-collapse"
-                        initial="hidden"
-                        animate="visible"
-                        variants={tableVariants}
-                    >
-                        <thead>
-                            <tr className="bg-[#FBFBFB] border-b border-[#F0F0F0]">
-                                <th className="p-4 text-left w-12">
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedMijozlar.length === customers.length && customers.length > 0}
-                                        onChange={toggleSelectAll}
-                                        className="w-4 h-4 rounded border-[#D0D0D0] text-[#141414] focus:ring-0 cursor-pointer"
-                                    />
-                                </th>
-                                <th className="p-4 text-[12px] font-bold text-[#999999] uppercase tracking-wider text-left">Mijoz</th>
-                                <th className="p-4 text-[12px] font-bold text-[#999999] uppercase tracking-wider text-left">Kontakt</th>
-                                <th className="p-4 text-[12px] font-bold text-[#999999] uppercase tracking-wider text-left">Faoliyati</th>
-                                <th className="p-4 text-[12px] font-bold text-[#999999] uppercase tracking-wider text-left">Statusi</th>
-                                <th className="p-4 text-[12px] font-bold text-[#999999] uppercase tracking-wider text-left">A'zo bo'lgan vaqti</th>
-                                <th className="p-4 text-right pr-6">Amallar</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-[#F0F0F0]">
-                            {customers.map((customer) => (
-                                <motion.tr
-                                    key={customer.id}
-                                    variants={rowVariants}
-                                    className={`hover:bg-[#FBFBFB] transition-colors group ${selectedMijozlar.includes(customer.id) ? 'bg-[#F9F9F8]' : ''}`}
-                                >
-                                    <td className="p-4">
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedMijozlar.includes(customer.id)}
-                                            onChange={() => toggleSelect(customer.id)}
-                                            className="w-4 h-4 rounded border-[#D0D0D0] text-[#141414] focus:ring-0 cursor-pointer"
-                                        />
-                                    </td>
-                                    <td className="p-4">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-full bg-[#F5F5F5] border border-[#E0E0E0] flex items-center justify-center text-[13px] font-bold text-[#141414]">
-                                                {customer.image}
-                                            </div>
-                                            <div className="flex flex-col">
-                                                <span className="text-[14px] font-bold text-[#141414]">{customer.name}</span>
-                                                <span className="text-[11px] text-[#999999]">{customer.email}</span>
-                                            </div>
+                    <AnimatePresence mode="wait">
+                        {viewMode === 'list' ? (
+                            <motion.table
+                                key="list-view"
+                                className="w-full border-collapse"
+                                initial="hidden"
+                                animate="visible"
+                                exit={{ opacity: 0, y: 10 }}
+                                variants={tableVariants}
+                            >
+                                <thead>
+                                    <tr className="bg-[#FBFBFB] border-b border-[#F0F0F0]">
+                                        <th className="p-4 text-left w-12">
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedMijozlar.length === customers.length && customers.length > 0}
+                                                onChange={toggleSelectAll}
+                                                className="w-4 h-4 rounded border-[#D0D0D0] text-[#141414] focus:ring-0 cursor-pointer"
+                                            />
+                                        </th>
+                                        <th className="p-4 text-[12px] font-bold text-[#999999] uppercase tracking-wider text-left">Mijoz</th>
+                                        <th className="p-4 text-[12px] font-bold text-[#999999] uppercase tracking-wider text-left">Kontakt</th>
+                                        <th className="p-4 text-[12px] font-bold text-[#999999] uppercase tracking-wider text-left">Faoliyati</th>
+                                        <th className="p-4 text-[12px] font-bold text-[#999999] uppercase tracking-wider text-left">Statusi</th>
+                                        <th className="p-4 text-[12px] font-bold text-[#999999] uppercase tracking-wider text-left">A'zo bo'lgan vaqti</th>
+                                        <th className="p-4 text-right pr-6">Amallar</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-[#F0F0F0]">
+                                    {customers.map((customer) => (
+                                        <motion.tr
+                                            key={customer.id}
+                                            variants={rowVariants}
+                                            className={`hover:bg-[#FBFBFB] transition-colors group ${selectedMijozlar.includes(customer.id) ? 'bg-[#F9F9F8]' : ''}`}
+                                        >
+                                            <td className="p-4">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedMijozlar.includes(customer.id)}
+                                                    onChange={() => toggleSelect(customer.id)}
+                                                    className="w-4 h-4 rounded border-[#D0D0D0] text-[#141414] focus:ring-0 cursor-pointer"
+                                                />
+                                            </td>
+                                            <td className="p-4">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-10 h-10 rounded-full bg-[#F5F5F5] border border-[#E0E0E0] flex items-center justify-center text-[13px] font-bold text-[#141414]">
+                                                        {customer.image}
+                                                    </div>
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[14px] font-bold text-[#141414]">{customer.name}</span>
+                                                        <span className="text-[11px] text-[#999999]">{customer.email}</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="p-4">
+                                                <span className="text-[13px] text-[#141414]">{customer.phone}</span>
+                                            </td>
+                                            <td className="p-4">
+                                                <span className="text-[13px] text-[#141414] font-medium">{customer.activity}</span>
+                                            </td>
+                                            <td className="p-4">
+                                                <span className={`inline-flex px-2.5 py-1 rounded-[6px] text-[11px] font-bold ${customer.status === 'Faol' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'
+                                                    }`}>
+                                                    {customer.status}
+                                                </span>
+                                            </td>
+                                            <td className="p-4">
+                                                <span className="text-[13px] text-[#999999]">{customer.joinDate}</span>
+                                            </td>
+                                            <td className="p-4 text-right pr-6">
+                                                <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <button className="p-2 hover:bg-[#F5F5F5] hover:text-[#141414] rounded-[6px] transition-colors text-[#999999]" title="Tahrirlash">
+                                                        <PencilIcon className="w-4.5 h-4.5" />
+                                                    </button>
+                                                    <button className="p-2 hover:bg-red-50 hover:text-red-600 rounded-[6px] transition-colors text-[#999999]" title="O'chirish">
+                                                        <TrashIcon className="w-4.5 h-4.5" />
+                                                    </button>
+                                                    <button className="p-2 hover:bg-[#F3F2F0] rounded-[6px] transition-colors text-[#999999]">
+                                                        <EllipsisHorizontalIcon className="w-5 h-5" />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </motion.tr>
+                                    ))}
+                                </tbody>
+                            </motion.table>
+                        ) : (
+                            <motion.div
+                                key="grid-view"
+                                initial="hidden"
+                                animate="visible"
+                                exit={{ opacity: 0, scale: 0.95 }}
+                                variants={tableVariants}
+                                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4"
+                            >
+                                {customers.map((customer) => (
+                                    <motion.div
+                                        key={customer.id}
+                                        variants={rowVariants}
+                                        className={`bg-white border border-[#F0F0F0] rounded-[10px] p-4 flex flex-col gap-4 relative group transition-all hover:border-[#141414] ${selectedMijozlar.includes(customer.id) ? 'bg-[#F9F9F8] border-[#141414]' : ''
+                                            }`}
+                                    >
+                                        <div className="absolute top-3 left-3">
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedMijozlar.includes(customer.id)}
+                                                onChange={() => toggleSelect(customer.id)}
+                                                className={`w-4 h-4 rounded border-[#D0D0D0] text-[#141414] focus:ring-0 cursor-pointer ${selectedMijozlar.includes(customer.id) ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                                                    } transition-opacity`}
+                                            />
                                         </div>
-                                    </td>
-                                    <td className="p-4">
-                                        <span className="text-[13px] text-[#141414]">{customer.phone}</span>
-                                    </td>
-                                    <td className="p-4">
-                                        <span className="text-[13px] text-[#141414] font-medium">{customer.activity}</span>
-                                    </td>
-                                    <td className="p-4">
-                                        <span className={`inline-flex px-2.5 py-1 rounded-[6px] text-[11px] font-bold ${customer.status === 'Faol' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'
-                                            }`}>
-                                            {customer.status}
-                                        </span>
-                                    </td>
-                                    <td className="p-4">
-                                        <span className="text-[13px] text-[#999999]">{customer.joinDate}</span>
-                                    </td>
-                                    <td className="p-4 text-right pr-6">
-                                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <button className="p-2 hover:bg-[#F5F5F5] hover:text-[#141414] rounded-[6px] transition-colors text-[#999999]" title="Tahrirlash">
-                                                <PencilIcon className="w-4.5 h-4.5" />
-                                            </button>
-                                            <button className="p-2 hover:bg-red-50 hover:text-red-600 rounded-[6px] transition-colors text-[#999999]" title="O'chirish">
-                                                <TrashIcon className="w-4.5 h-4.5" />
-                                            </button>
-                                            <button className="p-2 hover:bg-[#F3F2F0] rounded-[6px] transition-colors text-[#999999]">
+
+                                        <div className="flex items-center justify-between mt-2">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-12 h-12 rounded-full bg-[#F5F5F5] border border-[#E0E0E0] flex items-center justify-center text-[14px] font-bold text-[#141414]">
+                                                    {customer.image}
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className="text-[15px] font-bold text-[#141414]">{customer.name}</span>
+                                                    <span className="text-[12px] text-[#999999]">{customer.email}</span>
+                                                </div>
+                                            </div>
+                                            <button className="p-2 hover:bg-[#F5F5F5] rounded-[6px] transition-colors text-[#999999]">
                                                 <EllipsisHorizontalIcon className="w-5 h-5" />
                                             </button>
                                         </div>
-                                    </td>
-                                </motion.tr>
-                            ))}
-                        </tbody>
-                    </motion.table>
+
+                                        <div className="flex flex-col gap-2 pt-2 border-t border-[#F5F5F5]">
+                                            <div className="flex justify-between items-center text-[13px]">
+                                                <span className="text-[#999999]">Telefon</span>
+                                                <span className="text-[#141414] font-medium">{customer.phone}</span>
+                                            </div>
+                                            <div className="flex justify-between items-center text-[13px]">
+                                                <span className="text-[#999999]">Faoliyati</span>
+                                                <span className="text-[#141414] font-medium">{customer.activity}</span>
+                                            </div>
+                                            <div className="flex justify-between items-center text-[13px]">
+                                                <span className="text-[#999999]">Status</span>
+                                                <span className={`px-2 py-0.5 rounded-[4px] text-[11px] font-bold ${customer.status === 'Faol' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'
+                                                    }`}>
+                                                    {customer.status}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center gap-2 mt-auto pt-2">
+                                            <button className="flex-1 flex items-center justify-center gap-2 py-2 bg-white border border-[#E0E0E0] rounded-[6px] text-[12px] font-bold text-[#141414] hover:bg-[#F9F9F8] transition-colors">
+                                                <PencilIcon className="w-3.5 h-3.5" />
+                                                Tahrirlash
+                                            </button>
+                                            <button className="w-10 h-9 flex items-center justify-center bg-red-50 rounded-[6px] text-red-600 hover:bg-red-100 transition-colors">
+                                                <TrashIcon className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
             </div>
         </div>
