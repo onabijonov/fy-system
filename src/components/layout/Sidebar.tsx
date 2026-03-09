@@ -64,7 +64,7 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
     })).filter(section => section.items.length > 0)
 
     return (
-        <aside className={`${isCollapsed ? "w-[80px]" : "w-[340px]"} h-screen bg-background p-[20px] md:p-[40px] flex flex-col gap-[30px] border-r border-[#D0D0D0] transition-all duration-300 ease-in-out ${isCollapsed ? "!p-4" : ""}`}>
+        <aside className={`${isCollapsed ? "w-[80px]" : "w-[340px]"} h-screen bg-background p-[20px] md:p-[40px] flex flex-col gap-[30px] border-r border-[#D0D0D0] transition-all duration-300 ease-in-out ${isCollapsed ? "!p-4" : ""} overflow-hidden`}>
             <div className={`flex items-center ${isCollapsed ? "justify-center" : "justify-between"}`}>
                 {!isCollapsed && <img src="/Sidebar/Logo.svg" alt="Biznes Klub Logo" className="w-auto h-8 animate-in fade-in duration-300" />}
                 <button
@@ -108,10 +108,10 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                                         className={`flex items-center gap-3 apple-sq-12 cursor-pointer transition-all duration-200 group ${isActive
                                             ? "bg-white border border-[#D0D0D0] text-[#141414]"
                                             : "text-[#999999] border border-transparent hover:bg-[#E7E6E4]/50"
-                                            } ${isCollapsed ? "justify-center p-3 h-14 w-14 mx-auto" : "px-4 py-2"}`}
+                                            } ${isCollapsed ? "justify-center p-2 h-11 w-11 mx-auto" : "px-4 py-2"}`}
                                         title={isCollapsed ? item.name : ""}
                                     >
-                                        <item.icon className={`transition-all ${isCollapsed ? "w-7 h-7" : "w-5 h-5"} ${isActive ? "text-[#141414]" : "text-[#999999] group-hover:text-[#141414]"}`} strokeWidth={isActive ? 2.5 : 2} />
+                                        <item.icon className={`transition-all ${isCollapsed ? "w-5 h-5" : "w-5 h-5"} ${isActive ? "text-[#141414]" : "text-[#999999] group-hover:text-[#141414]"}`} strokeWidth={isActive ? 2.5 : 2} />
                                         {!isCollapsed && (
                                             <span className="text-[16px] font-normal animate-in fade-in slide-in-from-left-2 duration-300">
                                                 {item.name}
@@ -126,8 +126,8 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
             </nav>
 
             <div className={`mt-auto w-full transition-all duration-300 ${isCollapsed ? "bg-transparent border-none p-0 h-auto flex flex-col items-center" : "h-[60px] bg-white border border-[#D0D0D0] apple-sq-12 px-4 py-[10px] flex items-center gap-3"}`}>
-                <div className={`bg-[#141414] apple-sq-10 flex items-center justify-center flex-shrink-0 ${isCollapsed ? "w-14 h-14 cursor-pointer hover:scale-105 transition-transform" : "w-10 h-10"}`}>
-                    <UserIcon className={`${isCollapsed ? "w-7 h-7" : "w-6 h-6"} text-white`} />
+                <div className={`bg-[#141414] apple-sq-10 flex items-center justify-center flex-shrink-0 ${isCollapsed ? "w-11 h-11 cursor-pointer hover:scale-105 transition-transform" : "w-10 h-10"}`}>
+                    <UserIcon className={`${isCollapsed ? "w-5 h-5" : "w-6 h-6"} text-white`} />
                 </div>
                 {!isCollapsed && (
                     <>
