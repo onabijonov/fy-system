@@ -27,7 +27,7 @@ function App() {
       <Sidebar activeItem={activeItem} onNavigate={setActiveItem} />
       <div className="flex-1 flex flex-col h-screen">
         <header className="px-[40px] pt-[29px]">
-          <div className="h-[54px] bg-white border border-[#D0D0D0] apple-sq-12 px-[12px] flex items-center shadow-sm">
+          <div className="h-[54px] bg-white border border-[#D0D0D0] apple-sq-12 px-[6px] flex items-center">
             {/* Top Bar Content */}
             <div className="text-[18px] font-semibold text-[#141414]">{activeItem}</div>
           </div>
