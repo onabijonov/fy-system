@@ -184,7 +184,7 @@ function App() {
               </div>
             </div>
           </header>
-          <main className="flex-1 px-[16px] py-[20px] overflow-y-auto no-scrollbar relative">
+          <main className="flex-1 px-[16px] pt-[32px] pb-[20px] overflow-y-auto no-scrollbar relative">
             <div className="max-w-[1400px] mx-auto h-full">
               <AnimatePresence mode="wait">
                 <motion.div
