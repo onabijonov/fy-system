@@ -23,6 +23,8 @@ import {
   type CachedLead,
   type CachedPipeline,
 } from "@/lib/supabase/queries/amocrm"
+import { playNewLeadSound } from "@/lib/sounds/notification"
+import { showNewLeadToast, LeadToastContainer } from "@/components/ui/LeadToast"
 import { Button } from "@/components/ui/button"
 import { LidlarTable } from "@/components/sotuv/LidlarTable"
 import { PipelineBoard } from "@/components/sotuv/PipelineBoard"
@@ -242,28 +244,31 @@ export function Sotuv({ defaultTab = "lidlar" }: SotuvProps) {
     return () => { cancelled = true }
   }, [])
 
-  // ── PIPELINE O'ZGARGANDA: cache dan yoki Supabase dan ──
-  const fetchLeads = useCallback(async (pipelineId?: number) => {
+  // ── PIPELINE O'ZGARGANDA yoki YANGILASH bosilganda ──
+  // forceRefresh=true: cache ni skip qilib Supabase dan yangi ma'lumot oladi
+  const fetchLeads = useCallback(async (pipelineId?: number, forceRefresh = false) => {
     const targetId = pipelineId ?? selectedPipelineId
     if (!targetId) {
       setLoading(false)
       return
     }
 
-    // Cache da bo'lsa — spinner ko'rsatmasdan darhol qo'yamiz
-    const cached = leadsCache.current.get(targetId)
-    if (cached) {
-      setLeads(cached)
-      setLoading(false)
-      // Orqa fonda yangilaymiz
-      getCachedLeads(targetId).then((fresh) => {
-        if (fresh.length > 0) {
-          const mapped = fresh.map(mapCachedLeadToLead)
-          leadsCache.current.set(targetId, mapped)
-          setLeads(mapped)
-        }
-      }).catch(() => { /* silent refresh */ })
-      return
+    // Cache dan ko'rsatish (faqat force bo'lmaganda)
+    if (!forceRefresh) {
+      const cached = leadsCache.current.get(targetId)
+      if (cached) {
+        setLeads(cached)
+        setLoading(false)
+        // Orqa fonda yangilaymiz
+        getCachedLeads(targetId).then((fresh) => {
+          if (fresh.length > 0) {
+            const mapped = fresh.map(mapCachedLeadToLead)
+            leadsCache.current.set(targetId, mapped)
+            setLeads(mapped)
+          }
+        }).catch(() => { /* silent refresh */ })
+        return
+      }
     }
 
     try {
@@ -293,11 +298,18 @@ export function Sotuv({ defaultTab = "lidlar" }: SotuvProps) {
   useEffect(() => {
     if (!selectedPipelineId) return
 
-    const unsubscribe = subscribeToLeads(selectedPipelineId, (updatedLeads) => {
-      const mapped = updatedLeads.map(mapCachedLeadToLead)
-      leadsCache.current.set(selectedPipelineId, mapped)
-      setLeads(mapped)
-    })
+    const unsubscribe = subscribeToLeads(
+      selectedPipelineId,
+      (updatedLeads) => {
+        const mapped = updatedLeads.map(mapCachedLeadToLead)
+        leadsCache.current.set(selectedPipelineId, mapped)
+        setLeads(mapped)
+      },
+      (newLead) => {
+        playNewLeadSound()
+        showNewLeadToast(newLead.contact_name ?? newLead.name ?? "Yangi mijoz")
+      }
+    )
 
     return unsubscribe
   }, [selectedPipelineId])
@@ -361,6 +373,7 @@ export function Sotuv({ defaultTab = "lidlar" }: SotuvProps) {
 
   return (
     <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-10">
+      <LeadToastContainer />
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
@@ -394,7 +407,7 @@ export function Sotuv({ defaultTab = "lidlar" }: SotuvProps) {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={() => fetchLeads()}>
+          <Button variant="outline" size="sm" onClick={() => fetchLeads(undefined, true)}>
             <ArrowPathIcon className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
             Yangilash
           </Button>
@@ -518,7 +531,7 @@ export function Sotuv({ defaultTab = "lidlar" }: SotuvProps) {
         <div className="flex flex-col items-center justify-center py-20 gap-2">
           <span className="text-[14px] text-red-500 font-medium">{error}</span>
           <button
-            onClick={() => fetchLeads()}
+            onClick={() => fetchLeads(undefined, true)}
             className="text-[13px] text-[#141414] font-bold underline"
           >
             Qayta urinish

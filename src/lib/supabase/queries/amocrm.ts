@@ -50,18 +50,25 @@ export async function getCachedLeads(pipelineId?: number): Promise<CachedLead[]>
 
 export function subscribeToLeads(
   pipelineId: number | undefined,
-  onUpdate: (leads: CachedLead[]) => void
+  onUpdate: (leads: CachedLead[]) => void,
+  onNewLead?: (lead: CachedLead) => void
 ) {
+  const filter = pipelineId ? { filter: `pipeline_id=eq.${pipelineId}` } : {}
+
   const channel = supabase
     .channel(`amocrm_leads_${pipelineId ?? "all"}`)
     .on(
       "postgres_changes",
-      {
-        event: "*",
-        schema: "public",
-        table: "amocrm_leads",
-        ...(pipelineId ? { filter: `pipeline_id=eq.${pipelineId}` } : {}),
-      },
+      { event: "INSERT", schema: "public", table: "amocrm_leads", ...filter },
+      async (payload) => {
+        if (onNewLead) onNewLead(payload.new as CachedLead)
+        const leads = await getCachedLeads(pipelineId)
+        onUpdate(leads)
+      }
+    )
+    .on(
+      "postgres_changes",
+      { event: "UPDATE", schema: "public", table: "amocrm_leads", ...filter },
       async () => {
         const leads = await getCachedLeads(pipelineId)
         onUpdate(leads)
