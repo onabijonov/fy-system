@@ -1,0 +1,81 @@
+import {
+  filterLeadsByStage,
+  formatAmount,
+  getTotalAmount,
+  type Lead,
+  type StageConfig,
+} from "@/lib/mock-data/sotuv"
+import { PipelineColumn } from "./PipelineColumn"
+
+interface PipelineBoardProps {
+  leads: Lead[]
+  stageConfigs: Record<string, StageConfig>
+  stageOrder: string[]
+  pipelineName: string
+  onLeadClick?: (lead: Lead) => void
+}
+
+export function PipelineBoard({
+  leads,
+  stageConfigs,
+  stageOrder,
+  pipelineName,
+  onLeadClick,
+}: PipelineBoardProps) {
+  const totalLeads = leads.length
+  const totalAmount = getTotalAmount(leads)
+
+  return (
+    <div className="flex flex-col gap-4">
+      {/* Toolbar */}
+      <div className="flex items-center gap-4">
+        <span className="text-[13px] font-bold text-[#141414]" style={{ letterSpacing: "-0.4px" }}>
+          {pipelineName}
+        </span>
+
+        <div className="flex items-center gap-3 text-[12px] text-[#999] font-medium">
+          <span>
+            <span className="font-bold text-[#141414]">{totalLeads}</span> ta lid
+          </span>
+          <span className="text-[#E0E0E0]">|</span>
+          <span>
+            <span className="font-bold text-[#141414]">
+              {formatAmount(totalAmount)}
+            </span>{" "}
+            so'm
+          </span>
+        </div>
+
+        <div className="flex-1" />
+
+        <div className="flex items-center gap-2 text-[12px] text-[#999] font-medium">
+          <div className="w-2 h-2 rounded-full bg-green-500" />
+          AmoCRM sinxron
+        </div>
+      </div>
+
+      {/* Kanban columns — horizontal scroll */}
+      <div
+        className="flex gap-3 overflow-x-auto pb-4"
+        style={{
+          scrollbarWidth: "thin",
+          scrollbarColor: "#e0e0e0 transparent",
+        }}
+      >
+        {stageOrder.map((stageId) => {
+          const config = stageConfigs[stageId]
+          if (!config) return null
+          return (
+            <PipelineColumn
+              key={stageId}
+              stageId={stageId}
+              config={config}
+              leads={filterLeadsByStage(leads, stageId)}
+              onLeadClick={onLeadClick}
+            />
+          )
+        })}
+      </div>
+    </div>
+  )
+}

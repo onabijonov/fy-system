@@ -28,7 +28,7 @@ import {
     MicrophoneIcon,
     Squares2X2Icon,
     CommandLineIcon
-} from "@heroicons/react/24/outline"
+} from "@heroicons/react/24/solid"
 import { useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -140,9 +140,13 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
             initial={false}
             animate={{ width: isCollapsed ? 80 : 340 }}
             transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-            className="h-screen bg-background flex flex-col overflow-hidden relative sticky top-0 flex-shrink-0"
-            style={{ padding: "20px 20px" }}
+            className="h-screen flex flex-col overflow-hidden relative sticky top-0 flex-shrink-0 transition-colors duration-300"
+            style={{
+                background: 'var(--sidebar-bg)',
+                padding: "20px 20px",
+            }}
         >
+            {/* Top: Logo + Collapse button */}
             <div className="flex items-center justify-between h-8 mb-[20px] px-1">
                 <AnimatePresence mode="wait">
                     {!isCollapsed ? (
@@ -161,16 +165,20 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                 </AnimatePresence>
                 <button
                     onClick={() => setIsCollapsed(!isCollapsed)}
-                    className="p-2 hover:bg-[#E7E6E4] rounded-[8px] transition-colors group flex items-center justify-center flex-shrink-0"
+                    className="p-2 rounded-[8px] transition-colors flex items-center justify-center flex-shrink-0"
+                    style={{ color: 'var(--sidebar-muted)' }}
+                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'var(--sidebar-collapse-hover)'}
+                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}
                 >
                     {isCollapsed ? (
-                        <ChevronRightIcon className="w-5 h-5 text-[#999999] group-hover:text-[#141414]" strokeWidth={2} />
+                        <ChevronRightIcon className="w-5 h-5" strokeWidth={2} />
                     ) : (
-                        <ChevronLeftIcon className="w-5 h-5 text-[#999999] group-hover:text-[#141414]" strokeWidth={2} />
+                        <ChevronLeftIcon className="w-5 h-5" strokeWidth={2} />
                     )}
                 </button>
             </div>
 
+            {/* Search */}
             <AnimatePresence>
                 {!isCollapsed && (
                     <motion.div
@@ -184,13 +192,23 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                             placeholder="Qidiruv..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full h-[52px] bg-white border border-[#D0D0D0] apple-sq-12 pl-4 pr-12 text-[16px] outline-none focus:border-[#141414] transition-colors"
+                            className="w-full h-[52px] apple-sq-12 pl-4 pr-12 text-[16px] outline-none transition-colors"
+                            style={{
+                                background: 'var(--sidebar-search-bg)',
+                                border: '1px solid var(--sidebar-search-border)',
+                                color: 'var(--sidebar-fg)',
+                            }}
                         />
-                        <MagnifyingGlassIcon className="absolute right-5 top-1/2 -translate-y-1/2 w-5 h-5 text-[#D0D0D0]" strokeWidth={2} />
+                        <MagnifyingGlassIcon
+                            className="absolute right-5 top-1/2 -translate-y-1/2 w-5 h-5"
+                            strokeWidth={2}
+                            style={{ color: 'var(--sidebar-muted)' }}
+                        />
                     </motion.div>
                 )}
             </AnimatePresence>
 
+            {/* Nav */}
             <div className="relative flex-1 flex flex-col min-h-0 overflow-hidden -mx-4 px-4">
                 <nav className="flex-1 flex flex-col gap-[12px] overflow-y-hidden hover:overflow-y-auto no-scrollbar transition-all pt-2 pb-[100px]">
                     {filteredSections.map((section, index) => (
@@ -202,7 +220,8 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                                             initial={{ opacity: 0, x: -10 }}
                                             animate={{ opacity: 1, x: 0 }}
                                             exit={{ opacity: 0, x: -10 }}
-                                            className="text-[12px] font-medium text-[#999999] uppercase tracking-wider px-4"
+                                            className="text-[12px] font-medium uppercase tracking-wider px-4"
+                                            style={{ color: 'var(--sidebar-section-label)' }}
                                         >
                                             {section.title}
                                         </motion.h3>
@@ -225,14 +244,22 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                                                         }
                                                     }}
                                                     layout
-                                                    className={`flex items-center apple-sq-12 cursor-pointer transition-all duration-200 group relative overflow-hidden ${isActive
-                                                        ? "bg-white border border-[#D0D0D0] text-[#141414]"
-                                                        : "text-[#999999] border border-transparent hover:bg-[#E7E6E4]/50"
-                                                        } ${isCollapsed ? "w-11 h-11" : "px-4 py-2 w-full"}`}
+                                                    className={`flex items-center apple-sq-12 cursor-pointer transition-all duration-200 group relative overflow-hidden ${isCollapsed ? "w-11 h-11" : "px-4 py-2 w-full"}`}
+                                                    style={{
+                                                        background: isActive ? 'var(--sidebar-active-bg)' : 'transparent',
+                                                        border: isActive ? '1px solid var(--sidebar-active-border)' : '1px solid transparent',
+                                                        color: isActive ? 'var(--sidebar-fg)' : 'var(--sidebar-muted)',
+                                                    }}
+                                                    onMouseEnter={e => {
+                                                        if (!isActive) (e.currentTarget as HTMLElement).style.background = 'var(--sidebar-hover-bg)'
+                                                    }}
+                                                    onMouseLeave={e => {
+                                                        if (!isActive) (e.currentTarget as HTMLElement).style.background = 'transparent'
+                                                    }}
                                                     title={isCollapsed ? item.name : ""}
                                                 >
                                                     <div className={`flex-shrink-0 flex items-center justify-center ${isCollapsed ? "w-11 h-11" : "w-5 h-5 mr-3"}`}>
-                                                        <item.icon className="w-5 h-5 transition-all" strokeWidth={isActive ? 2.5 : 2} />
+                                                        <item.icon className="w-5 h-5 transition-all" />
                                                     </div>
                                                     <AnimatePresence>
                                                         {!isCollapsed && (
@@ -250,7 +277,7 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                                                                         animate={{ rotate: isExpanded ? 180 : 0 }}
                                                                         transition={{ duration: 0.2 }}
                                                                     >
-                                                                        <ChevronDownIcon className="w-4 h-4 text-[#999999]" />
+                                                                        <ChevronDownIcon className="w-4 h-4" style={{ color: 'var(--sidebar-muted)' }} />
                                                                     </motion.div>
                                                                 )}
                                                             </motion.div>
@@ -259,7 +286,8 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                                                     {isActive && !isCollapsed && (
                                                         <motion.div
                                                             layoutId="active-indicator"
-                                                            className="absolute left-0 w-1 h-6 bg-[#141414] rounded-r-full"
+                                                            className="absolute left-0 w-1 h-6 rounded-r-full"
+                                                            style={{ background: 'var(--sidebar-indicator)' }}
                                                         />
                                                     )}
                                                 </motion.div>
@@ -278,11 +306,20 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                                                                     <motion.div
                                                                         key={subItem.name}
                                                                         onClick={() => onNavigate(subItem.name)}
-                                                                        className={`flex items-center pl-12 pr-4 py-2 cursor-pointer transition-all duration-200 apple-sq-10 group ${isSubActive ? "text-[#141414] font-medium" : "text-[#999999] hover:text-[#141414]"}`}
+                                                                        className="flex items-center pl-12 pr-4 py-2 cursor-pointer transition-all duration-200 apple-sq-10 group"
+                                                                        style={{
+                                                                            color: isSubActive ? 'var(--sidebar-fg)' : 'var(--sidebar-muted)',
+                                                                            fontWeight: isSubActive ? 500 : 400,
+                                                                        }}
+                                                                        onMouseEnter={e => {
+                                                                            if (!isSubActive) (e.currentTarget as HTMLElement).style.color = 'var(--sidebar-fg)'
+                                                                        }}
+                                                                        onMouseLeave={e => {
+                                                                            if (!isSubActive) (e.currentTarget as HTMLElement).style.color = 'var(--sidebar-muted)'
+                                                                        }}
                                                                     >
-                                                                        <subItem.icon className={`w-4 h-4 mr-3 transition-colors ${isSubActive ? "text-[#141414]" : "text-[#999999] group-hover:text-[#141414]"}`} strokeWidth={isSubActive ? 2.5 : 2} />
+                                                                        <subItem.icon className="w-4 h-4 mr-3 transition-colors" />
                                                                         <span className="flex-1 truncate">{subItem.name}</span>
-                                                                        {/* Notification Dots for specific items */}
                                                                         {(subItem.name === "Sotuv bo'limi" || subItem.name === "To'lovlar") && (
                                                                             <span className="w-1.5 h-1.5 bg-[#FF3B30] rounded-full shadow-[0_0_8px_rgba(255,59,48,0.4)] flex-shrink-0" />
                                                                         )}
@@ -298,19 +335,33 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                                 </div>
                             </div>
                             {index < filteredSections.length - 1 && (
-                                <div className="h-[1px] bg-[#E0E0E0] mx-4" />
+                                <div 
+                                    className="mx-4 h-[1px]" 
+                                    style={{ 
+                                        backgroundImage: `linear-gradient(to right, var(--sidebar-divider) 0%, var(--sidebar-divider) 50%, transparent 50%, transparent 100%)`,
+                                        backgroundSize: '14px 1px',
+                                        backgroundRepeat: 'repeat-x'
+                                    }} 
+                                />
                             )}
                         </motion.div>
                     ))}
                 </nav>
-                {/* Scroll Blurs */}
-                <div className="absolute top-0 left-0 right-0 h-4 bg-gradient-to-b from-[#F3F2F0] to-transparent pointer-events-none z-10" />
-                <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[#F3F2F0] via-[#F3F2F0]/80 to-transparent pointer-events-none z-10" />
+                {/* Scroll blurs */}
+                <div className="absolute top-0 left-0 right-0 h-4 pointer-events-none z-10"
+                    style={{ background: 'linear-gradient(to bottom, var(--sidebar-bg), transparent)' }} />
+                <div className="absolute bottom-0 left-0 right-0 h-12 pointer-events-none z-10"
+                    style={{ background: 'linear-gradient(to top, var(--sidebar-bg) 30%, transparent)' }} />
             </div>
 
+            {/* Profile */}
             <motion.div
                 layout
-                className={`mt-auto w-full transition-all duration-300 ${isCollapsed ? "bg-transparent border-none p-0 h-auto flex flex-col items-center" : "h-[60px] bg-white border border-[#D0D0D0] apple-sq-12 px-4 py-[10px] flex items-center gap-3"}`}
+                className={`mt-auto w-full transition-all duration-300 ${isCollapsed ? "bg-transparent border-none p-0 h-auto flex flex-col items-center" : "h-[60px] apple-sq-12 px-4 py-[10px] flex items-center gap-3"}`}
+                style={isCollapsed ? {} : {
+                    background: 'var(--sidebar-profile-bg)',
+                    border: '1px solid var(--sidebar-profile-border)',
+                }}
             >
                 <input
                     type="file"
@@ -322,7 +373,8 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                 <motion.div
                     layout
                     onClick={() => fileInputRef.current?.click()}
-                    className={`bg-[#141414] rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer overflow-hidden group/avatar relative ${isCollapsed ? "w-11 h-11" : "w-10 h-10"}`}
+                    className={`rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer overflow-hidden group/avatar relative ${isCollapsed ? "w-11 h-11" : "w-10 h-10"}`}
+                    style={{ background: 'var(--sidebar-avatar-bg)' }}
                 >
                     {profileImage ? (
                         <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
@@ -341,13 +393,17 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
                             exit={{ opacity: 0, x: -10 }}
                             className="flex flex-col gap-0 min-w-0"
                         >
-                            <span className="text-[16px] font-semibold text-[#141414] truncate leading-tight">Ali Valiev</span>
-                            <span className="text-[14px] text-[#999999] truncate leading-tight">Administrator</span>
+                            <span className="text-[16px] font-semibold truncate leading-tight" style={{ color: 'var(--sidebar-fg)' }}>Ali Valiev</span>
+                            <span className="text-[14px] truncate leading-tight" style={{ color: 'var(--sidebar-muted)' }}>Administrator</span>
                         </motion.div>
                     )}
                 </AnimatePresence>
                 {!isCollapsed && (
-                    <ArrowLeftOnRectangleIcon className="ml-auto w-5 h-5 text-[#999999] cursor-pointer hover:text-[#141414] transition-colors flex-shrink-0" strokeWidth={2} />
+                    <ArrowLeftOnRectangleIcon
+                        className="ml-auto w-5 h-5 cursor-pointer flex-shrink-0 transition-colors"
+                        strokeWidth={2}
+                        style={{ color: 'var(--sidebar-muted)' }}
+                    />
                 )}
             </motion.div>
         </motion.aside>

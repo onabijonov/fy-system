@@ -12,7 +12,15 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3001,
+    port: 5001,
     open: true,
+    proxy: {
+      "/api/amo": {
+        target: "https://fikryetakchilari.amocrm.ru",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/amo/, "/api/v4"),
+        secure: true,
+      },
+    },
   },
 })

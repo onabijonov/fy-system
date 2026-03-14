@@ -3,27 +3,151 @@ import {
     UserPlusIcon,
     TicketIcon,
     ArrowUpRightIcon,
-    ListBulletIcon,
-    Squares2X2Icon,
     FunnelIcon,
     ArrowUpTrayIcon,
     PlusIcon,
-    EllipsisHorizontalIcon,
     PencilIcon,
     TrashIcon,
-    ArrowDownTrayIcon
-} from "@heroicons/react/24/outline"
+    ArrowDownTrayIcon,
+    EyeIcon,
+    XMarkIcon,
+    EnvelopeIcon,
+    PhoneIcon,
+    BriefcaseIcon,
+    CalendarIcon,
+    BanknotesIcon,
+    PhotoIcon,
+    CameraIcon
+} from "@heroicons/react/24/solid"
+import { StarIcon as StarSolidIcon } from "@heroicons/react/24/solid"
+import { StarIcon as StarOutlineIcon } from "@heroicons/react/24/outline"
 import { motion, AnimatePresence } from "framer-motion"
-import { useState } from "react"
+import { useState, useMemo, useEffect, useCallback } from "react"
+import {
+    createColumnHelper,
+    flexRender,
+    getCoreRowModel,
+    useReactTable,
+    getSortedRowModel,
+    getFilteredRowModel,
+    type SortingState,
+} from '@tanstack/react-table'
+
+interface EventHistory {
+    id: number;
+    eventName: string;
+    date: string;
+    status: string;
+}
+
+interface Customer {
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+    activity: string;
+    eventsCount: number;
+    status: string;
+    joinDate: string;
+    image: string;
+    totalSpent: string;
+    history: EventHistory[];
+    industry: string;
+}
 
 export function Mijozlar() {
-    const [viewMode, setViewMode] = useState<'list' | 'grid'>('list')
-    const [selectedMijozlar, setSelectedMijozlar] = useState<number[]>([])
+    const [selectedMijozlar, setSelectedMijozlar] = useState<string[]>([])
+    const [sorting, setSorting] = useState<SortingState>([])
+    const [globalFilter, setGlobalFilter] = useState('')
+    const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null)
+    const [showFullHistory, setShowFullHistory] = useState(false)
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+    const [customerToDelete, setCustomerToDelete] = useState<Customer | null>(null)
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
+
+    // Data State
+    const [customers, setCustomers] = useState<Customer[]>([]);
+
+    const fetchCustomers = useCallback(async () => {
+        try {
+            setLoading(true)
+            setError(null)
+            const { getClients } = await import("@/lib/supabase/queries/clients")
+            const rows = await getClients()
+            setCustomers(rows.map(row => ({
+                id: row.id,
+                name: row.full_name,
+                email: row.email ?? '',
+                phone: row.phone ?? '',
+                activity: row.activity ?? '',
+                industry: row.industry ?? '',
+                eventsCount: row.events_count,
+                status: row.status,
+                joinDate: row.join_date ?? '',
+                image: row.image ?? '',
+                totalSpent: `${Number(row.total_spent).toLocaleString("uz-UZ")} UZS`,
+                history: [],
+            })))
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Ma'lumotlarni yuklashda xatolik")
+        } finally {
+            setLoading(false)
+        }
+    }, [])
+
+    useEffect(() => {
+        fetchCustomers()
+    }, [fetchCustomers]);
+
+    // New Customer Form State
+    const [newCustomer, setNewCustomer] = useState({
+        name: '',
+        activity: '',
+        industry: '',
+        phone: '+998 ',
+        email: '',
+        joinDate: new Date().toISOString().split('T')[0],
+        image: ''
+    });
+
+    useEffect(() => {
+        setShowFullHistory(false)
+    }, [selectedCustomer])
+
+    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let value = e.target.value;
+        
+        // Always start with +998
+        if (!value.startsWith('+998 ')) {
+            value = '+998 ' + value.replace(/^\+998\s*/, '');
+        }
+
+        // Get only the numeric part after +998
+        const digits = value.slice(5).replace(/\D/g, '').slice(0, 9);
+        
+        // Format: +998 90 123 45 67
+        let formatted = '+998 ';
+        if (digits.length > 0) {
+            formatted += digits.substring(0, 2);
+            if (digits.length > 2) {
+                formatted += ' ' + digits.substring(2, 5);
+                if (digits.length > 5) {
+                    formatted += ' ' + digits.substring(5, 7);
+                    if (digits.length > 7) {
+                        formatted += ' ' + digits.substring(7, 9);
+                    }
+                }
+            }
+        }
+        
+        setNewCustomer(prev => ({ ...prev, phone: formatted }));
+    };
 
     const stats = [
         {
             title: "Jami Mijozlar soni",
-            value: "1,284",
+            value: customers.length.toString(),
             growth: "+12.5%",
             icon: UsersIcon,
             color: "text-[#141414]",
@@ -47,341 +171,699 @@ export function Mijozlar() {
         }
     ];
 
-    const customers = [
-        { id: 1, name: "Aziz Rahimov", email: "aziz.r@gmail.com", phone: "+998 90 123 45 67", activity: "Yess! Coffee - kofeynerlar tarmog‘i asoschisi", eventsCount: 12, status: "Faol", joinDate: "12 Okt, 2023", image: "AR" },
-        { id: 2, name: "Malika Shoraxmedova", email: "malika.sh@mail.ru", phone: "+998 93 456 78 90", activity: "Dizayner", eventsCount: 5, status: "Nofaol", joinDate: "15 Okt, 2023", image: "MS" },
-        { id: 3, name: "Jasur Abdullaev", email: "jasur.a@outlook.com", phone: "+998 94 789 12 34", activity: "IT Mutaxassis", eventsCount: 8, status: "Faol", joinDate: "20 Okt, 2023", image: "JA" },
-        { id: 4, name: "Dilnoza Karimova", email: "dili.k@gmail.com", phone: "+998 99 321 65 43", activity: "Marketolog", eventsCount: 2, status: "Nofaol", joinDate: "22 Okt, 2023", image: "DK" },
-        { id: 5, name: "Otabek Mahmudov", email: "otabek.m@gmail.com", phone: "+998 90 987 65 43", activity: "Menejer", eventsCount: 15, status: "Faol", joinDate: "25 Okt, 2023", image: "OM" },
-    ];
+    const columnHelper = createColumnHelper<Customer>()
 
-    const toggleSelectAll = () => {
-        if (selectedMijozlar.length === customers.length) {
-            setSelectedMijozlar([])
-        } else {
-            setSelectedMijozlar(customers.map(c => c.id))
-        }
-    }
+    const columns = [
+        columnHelper.display({
+            id: 'select',
+            header: ({ table }) => (
+                <input
+                    type="checkbox"
+                    checked={table.getIsAllPageRowsSelected()}
+                    onChange={table.getToggleAllPageRowsSelectedHandler()}
+                    className="w-4 h-4 rounded-[4px] border-[#D0D0D0] text-[#141414] focus:ring-0 cursor-pointer"
+                />
+            ),
+            cell: ({ row }) => (
+                <input
+                    type="checkbox"
+                    checked={row.getIsSelected()}
+                    onChange={row.getToggleSelectedHandler()}
+                    onClick={(e) => e.stopPropagation()}
+                    className="w-4 h-4 rounded-[4px] border-[#D0D0D0] text-[#141414] focus:ring-0 cursor-pointer"
+                />
+            ),
+        }),
+        columnHelper.accessor('name', {
+            header: 'Mijoz',
+            cell: info => (
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-[6px] bg-[#F5F5F5] border border-[#E0E0E0] overflow-hidden flex-shrink-0">
+                        {info.row.original.image ? (
+                            <img src={info.row.original.image} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-[#F0F0F0] text-[#999999]">
+                                <UsersIcon className="w-5 h-5" />
+                            </div>
+                        )}
+                    </div>
+                    <div className="flex flex-col">
+                        <span className="text-[14px] font-bold text-[#141414]">{info.getValue()}</span>
+                        <span className="text-[11px] text-[#999999] font-medium">{info.row.original.email || 'Email kiritilmagan'}</span>
+                    </div>
+                </div>
+            ),
+        }),
+        columnHelper.accessor('phone', {
+            header: 'Kontakt',
+            cell: info => <span className="text-[13px] text-[#141414] font-medium">{info.getValue()}</span>,
+        }),
+        columnHelper.accessor('activity', {
+            header: 'Faoliyati',
+            cell: info => <div className="text-[13px] text-[#141414] font-medium leading-tight line-clamp-1">{info.getValue()}</div>,
+        }),
+        columnHelper.accessor('status', {
+            header: 'Statusi',
+            cell: info => (
+                <span className={`inline-flex px-2 py-0.5 rounded-[4px] text-[11px] font-bold ${info.getValue() === 'Faol' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}`}>
+                    {info.getValue()}
+                </span>
+            ),
+        }),
+        columnHelper.display({
+            id: 'actions',
+            header: () => <div className="text-right pr-6">Amallar</div>,
+            cell: (info) => (
+                <div className="flex items-center justify-end gap-1 pr-2">
+                    <button 
+                        className="p-1.5 hover:bg-[#F3F2F0] rounded-[6px] transition-colors text-[#999999] hover:text-[#141414]" 
+                        title="Ko'rish"
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            setSelectedCustomer(info.row.original)
+                        }}
+                    >
+                        <EyeIcon className="w-5 h-5" />
+                    </button>
+                    <button 
+                        className="p-1.5 hover:bg-red-50 rounded-[6px] transition-colors text-[#999999] hover:text-red-600" 
+                        title="O'chirish" 
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setCustomerToDelete(info.row.original);
+                        }}
+                    >
+                        <TrashIcon className="w-4.5 h-4.5" />
+                    </button>
+                </div>
+            ),
+        }),
+    ]
 
-    const toggleSelect = (id: number) => {
-        if (selectedMijozlar.includes(id)) {
-            setSelectedMijozlar(selectedMijozlar.filter(i => i !== id))
-        } else {
-            setSelectedMijozlar([...selectedMijozlar, id])
-        }
-    }
+    const table = useReactTable({
+        data: customers,
+        columns,
+        state: {
+            sorting,
+            globalFilter,
+            rowSelection: selectedMijozlar.reduce((acc, id) => {
+                const idx = customers.findIndex(c => c.id === id);
+                if (idx !== -1) acc[idx] = true;
+                return acc;
+            }, {} as Record<string, boolean>),
+        },
+        onSortingChange: setSorting,
+        onGlobalFilterChange: setGlobalFilter,
+        getCoreRowModel: getCoreRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
+        onRowSelectionChange: (updater) => {
+            const newSelection = typeof updater === 'function' ? updater(table.getState().rowSelection) : updater;
+            const selectedIds = Object.keys(newSelection)
+                .filter(key => newSelection[Number(key)])
+                .map(key => customers[Number(key)].id);
+            setSelectedMijozlar(selectedIds);
+        },
+    })
 
-    const tableVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.08
-            }
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setNewCustomer(prev => ({ ...prev, image: reader.result as string }));
+            };
+            reader.readAsDataURL(file);
         }
     };
 
-    const rowVariants = {
-        hidden: { opacity: 0, y: 15, scale: 0.98 },
-        visible: {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            transition: {
-                type: "spring" as const,
-                bounce: 0,
-                duration: 0.5
+    const handleAddCustomer = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const { createClient } = await import("@/lib/supabase/queries/clients")
+            const row = await createClient({
+                full_name: newCustomer.name,
+                email: newCustomer.email || null,
+                phone: newCustomer.phone || null,
+                activity: newCustomer.activity || null,
+                industry: newCustomer.industry || null,
+                image: newCustomer.image || null,
+                join_date: newCustomer.joinDate,
+                status: 'Faol',
+            })
+            const newEntry: Customer = {
+                id: row.id,
+                name: row.full_name,
+                email: row.email ?? '',
+                phone: row.phone ?? '',
+                activity: row.activity ?? '',
+                industry: row.industry ?? '',
+                eventsCount: row.events_count,
+                status: row.status,
+                joinDate: row.join_date ?? '',
+                image: row.image || 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=256&h=256&fit=crop',
+                totalSpent: '0 UZS',
+                history: [],
             }
+            setCustomers(prev => [newEntry, ...prev]);
+            setIsAddModalOpen(false);
+            setNewCustomer({
+                name: '',
+                activity: '',
+                industry: '',
+                phone: '+998 ',
+                email: '',
+                joinDate: new Date().toISOString().split('T')[0],
+                image: ''
+            });
+        } catch (err) {
+            console.error('Mijoz qo\'shishda xatolik:', err)
         }
     };
+
+    const rating = selectedCustomer ? Math.min(5, Math.ceil(selectedCustomer.eventsCount / 4)) : 0;
 
     return (
-        <div className="flex flex-col gap-6 h-full animate-in fade-in slide-in-from-bottom-4 duration-700">
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="flex flex-col gap-6 h-full animate-in fade-in slide-in-from-bottom-4 duration-700 relative">
+            {loading && (
+                <div className="flex items-center justify-center py-20">
+                    <div className="w-6 h-6 border-2 border-[#141414] border-t-transparent rounded-full animate-spin" />
+                </div>
+            )}
+            {error && !loading && (
+                <div className="flex flex-col items-center justify-center py-20 gap-2">
+                    <span className="text-[14px] text-red-500 font-medium">{error}</span>
+                    <button onClick={fetchCustomers} className="text-[13px] text-[#141414] font-bold underline">Qayta urinish</button>
+                </div>
+            )}
+            {!loading && !error && <>
+            {/* Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {stats.map((stat, index) => (
-                    <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: index * 0.1 }}
-                        whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                        className="bg-white border border-[#F0F0F0] rounded-[8px] p-5 flex flex-col gap-4 border-b-2 hover:border-b-[#141414] transition-colors cursor-default"
-                    >
+                    <div key={index} className="bg-white border border-[#F0F0F0] rounded-[8px] p-5 flex flex-col gap-3 transition-all">
                         <div className="flex items-center justify-between">
-                            <div className={`w-12 h-12 ${stat.bg} rounded-[8px] flex items-center justify-center`}>
-                                <stat.icon className={`w-6 h-6 ${stat.color}`} />
-                            </div>
-                            <motion.div
-                                initial={{ scale: 0.8 }}
-                                animate={{ scale: 1 }}
-                                transition={{ delay: 0.5 + (index * 0.1) }}
-                                className="flex items-center gap-1.5 bg-white border border-[#141414] px-3 py-1 rounded-[8px]"
-                            >
-                                <ArrowUpRightIcon className="w-3.5 h-3.5 text-[#141414] stroke-[3px]" />
-                                <span className="text-[13px] font-bold text-[#141414]">{stat.growth}</span>
-                            </motion.div>
-                        </div>
-                        <div className="flex flex-col gap-1">
                             <span className="text-[13px] font-medium text-[#999999]">{stat.title}</span>
+                            <div className="flex items-center gap-1 text-green-600 text-[12px] font-bold">
+                                <ArrowUpRightIcon className="w-3 h-3" />
+                                {stat.growth}
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                             <div className={`w-10 h-10 ${stat.bg} rounded-[6px] flex items-center justify-center`}>
+                                <stat.icon className={`w-5 h-5 ${stat.color}`} />
+                            </div>
                             <span className="text-[24px] font-bold text-[#141414]">{stat.value}</span>
                         </div>
-                    </motion.div>
+                    </div>
                 ))}
             </div>
 
-            {/* Toolbar & Table Container */}
-            <div className="bg-white border border-[#F0F0F0] rounded-[8px] flex flex-col overflow-hidden">
-                {/* Toolbar */}
-                <div className="p-4 border-b border-[#F0F0F0] flex flex-wrap items-center justify-between gap-4 bg-white relative">
+            {/* Table Area */}
+            <div className="bg-white border border-[#F0F0F0] rounded-[8px] flex flex-col overflow-hidden shadow-xs">
+                {/* Search & Actions */}
+                <div className="p-4 border-b border-[#F0F0F0] flex items-center justify-between bg-white">
                     <div className="flex items-center gap-4">
-                        {/* View Switcher */}
-                        <div className="bg-[#F5F5F5] p-1 rounded-[8px] flex items-center gap-1">
-                            <button
-                                onClick={() => setViewMode('list')}
-                                className={`flex items-center gap-2 px-3 py-1.5 rounded-[8px] text-[13px] font-bold transition-all ${viewMode === 'list' ? 'bg-white text-[#141414]' : 'text-[#999999] hover:text-[#141414]'
-                                    }`}
-                            >
-                                <ListBulletIcon className="w-4 h-4" />
-                                Ro'yxat
-                            </button>
-                            <button
-                                onClick={() => setViewMode('grid')}
-                                className={`flex items-center gap-2 px-3 py-1.5 rounded-[8px] text-[13px] font-bold transition-all ${viewMode === 'grid' ? 'bg-white text-[#141414]' : 'text-[#999999] hover:text-[#141414]'
-                                    }`}
-                            >
-                                <Squares2X2Icon className="w-4 h-4" />
-                                Setka
-                            </button>
+                        <div className="relative">
+                            <input 
+                                type="text" 
+                                value={globalFilter ?? ''}
+                                onChange={e => setGlobalFilter(e.target.value)}
+                                placeholder="Ism, telefon yoki faoliyat bo'yicha qidirish..." 
+                                className="pl-9 pr-4 py-2 bg-[#F5F5F5] border-transparent focus:bg-white focus:border-[#141414]/10 rounded-[8px] text-[13px] w-80 transition-all outline-hidden font-medium"
+                            />
+                            <UsersIcon className="w-4 h-4 text-[#999999] absolute left-3 top-1/2 -translate-y-1/2" />
                         </div>
-
-                        {/* Selection Actions (Floating style) */}
-                        <AnimatePresence>
-                            {selectedMijozlar.length > 0 && (
-                                <motion.div
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -20 }}
-                                    className="flex items-center gap-2 pl-4 border-l border-[#F0F0F0]"
+                        {selectedMijozlar.length > 0 && (
+                            <div className="flex items-center gap-2 pl-4 border-l border-[#F0F0F0]">
+                                <span className="text-[13px] font-bold text-[#141414]">{selectedMijozlar.length} ta tanlandi</span>
+                                <button
+                                    onClick={async () => {
+                                        try {
+                                            const { deleteClients } = await import("@/lib/supabase/queries/clients")
+                                            await deleteClients(selectedMijozlar)
+                                            setCustomers(prev => prev.filter(c => !selectedMijozlar.includes(c.id)));
+                                            setSelectedMijozlar([]);
+                                        } catch (err) {
+                                            console.error("O'chirishda xatolik:", err)
+                                        }
+                                    }}
+                                    className="p-1.5 hover:bg-red-50 text-red-600 rounded-[6px] transition-colors"
                                 >
-                                    <span className="text-[13px] font-medium text-[#999999] mr-2">
-                                        {selectedMijozlar.length} ta tanlandi
-                                    </span>
-                                    {selectedMijozlar.length === 1 && (
-                                        <button className="flex items-center gap-2 px-3 py-1.5 bg-white border border-[#E0E0E0] text-[#141414] rounded-[8px] text-[12px] font-bold hover:bg-[#F9F9F8] transition-colors">
-                                            <PencilIcon className="w-4 h-4" />
-                                            Tahrirlash
-                                        </button>
-                                    )}
-                                    <button className="flex items-center gap-2 px-3 py-1.5 bg-red-50 text-red-600 rounded-[8px] text-[12px] font-bold hover:bg-red-100 transition-colors">
-                                        <TrashIcon className="w-4 h-4" />
-                                        O'chirish
-                                    </button>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
+                                    <TrashIcon className="w-4 h-4" />
+                                </button>
+                            </div>
+                        )}
                     </div>
-
-                    {/* Actions */}
-                    <div className="flex items-center gap-3">
-                        <button className="flex items-center gap-2 px-4 py-2 bg-white border border-[#E0E0E0] rounded-[8px] text-[13px] font-bold text-[#141414] hover:bg-[#F9F9F8] transition-colors">
+                    <div className="flex items-center gap-2">
+                        <button className="flex items-center gap-2 px-3 py-2 hover:bg-[#F5F5F5] rounded-[8px] text-[13px] font-bold text-[#141414] transition-colors">
                             <FunnelIcon className="w-4 h-4" />
-                            Filtr
+                            Filtrlar
                         </button>
-                        <button className="flex items-center gap-2 px-4 py-2 bg-white border border-[#E0E0E0] rounded-[8px] text-[13px] font-bold text-[#141414] hover:bg-[#F9F9F8] transition-colors">
+                        <button className="flex items-center gap-2 px-3 py-2 hover:bg-[#F5F5F5] rounded-[8px] text-[13px] font-bold text-[#141414] transition-colors">
                             <ArrowUpTrayIcon className="w-4 h-4" />
                             Eksport
                         </button>
-                        <button className="flex items-center gap-2 px-4 py-2 bg-[#141414] border border-[#141414] rounded-[8px] text-[13px] font-bold text-white hover:bg-[#222] transition-colors active:scale-95">
+                        <button 
+                            onClick={() => setIsAddModalOpen(true)}
+                            className="flex items-center gap-2 px-4 py-2 bg-[#141414] text-white rounded-[8px] text-[13px] font-bold hover:bg-black transition-all active:scale-95"
+                        >
                             <PlusIcon className="w-4 h-4" />
                             Yangi mijoz
                         </button>
                     </div>
                 </div>
 
-                {/* View Content */}
+                {/* Table Data */}
                 <div className="overflow-x-auto no-scrollbar">
-                    <AnimatePresence mode="wait">
-                        {viewMode === 'list' ? (
-                            <motion.table
-                                key="list-view"
-                                className="w-full border-collapse"
-                                initial="hidden"
-                                animate="visible"
-                                exit={{ opacity: 0, y: 10 }}
-                                variants={tableVariants}
-                            >
-                                <thead>
-                                    <tr className="bg-[#FBFBFB] border-b border-[#F0F0F0]">
-                                        <th className="p-4 text-left w-12">
-                                            <input
-                                                type="checkbox"
-                                                checked={selectedMijozlar.length === customers.length && customers.length > 0}
-                                                onChange={toggleSelectAll}
-                                                className="w-4 h-4 rounded border-[#D0D0D0] text-[#141414] focus:ring-0 cursor-pointer"
-                                            />
+                    <table className="w-full border-collapse">
+                        <thead>
+                            {table.getHeaderGroups().map(headerGroup => (
+                                <tr key={headerGroup.id} className="bg-[#FBFBFB] border-b border-[#F0F0F0]">
+                                    {headerGroup.headers.map(header => (
+                                        <th key={header.id} className="p-4 text-[13px] font-bold text-[#999999] text-left uppercase tracking-tight">
+                                            {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                                         </th>
-                                        <th className="p-4 text-[14px] font-semibold text-[#141414] text-left">Mijoz</th>
-                                        <th className="p-4 text-[14px] font-semibold text-[#141414] text-left">Kontakt</th>
-                                        <th className="p-4 text-[14px] font-semibold text-[#141414] text-left">Faoliyati</th>
-                                        <th className="p-4 text-[14px] font-semibold text-[#141414] text-left">Tadbirlar</th>
-                                        <th className="p-4 text-[14px] font-semibold text-[#141414] text-left">Statusi</th>
-                                        <th className="p-4 text-[14px] font-semibold text-[#141414] text-left">A'zo bo'lgan vaqti</th>
-                                        <th className="p-4 text-[14px] font-semibold text-[#141414] text-right pr-6">Amallar</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-[#F0F0F0]">
-                                    {customers.map((customer) => (
-                                        <motion.tr
-                                            key={customer.id}
-                                            variants={rowVariants}
-                                            className={`hover:bg-[#FBFBFB] transition-colors group ${selectedMijozlar.includes(customer.id) ? 'bg-[#F9F9F8]' : ''}`}
-                                        >
-                                            <td className="p-4">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={selectedMijozlar.includes(customer.id)}
-                                                    onChange={() => toggleSelect(customer.id)}
-                                                    className="w-4 h-4 rounded border-[#D0D0D0] text-[#141414] focus:ring-0 cursor-pointer"
-                                                />
-                                            </td>
-                                            <td className="p-4">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="relative group/avatar w-10 h-10 rounded-full bg-[#F5F5F5] border border-[#E0E0E0] flex items-center justify-center text-[13px] font-bold text-[#141414] overflow-hidden flex-shrink-0">
-                                                        {customer.image}
-                                                        <div
-                                                            className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity cursor-pointer text-white"
-                                                            title="Rasmni yuklab olish"
-                                                        >
-                                                            <ArrowDownTrayIcon className="w-4 h-4" />
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <span className="text-[14px] font-bold text-[#141414]">{customer.name}</span>
-                                                        <span className="text-[11px] text-[#999999]">{customer.email}</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className="p-4">
-                                                <span className="text-[13px] text-[#141414]">{customer.phone}</span>
-                                            </td>
-                                            <td className="p-4" style={{ minWidth: '150px' }}>
-                                                <div className="text-[13px] text-[#141414] font-medium leading-tight">{customer.activity}</div>
-                                            </td>
-                                            <td className="p-4">
-                                                <span className="text-[13px] text-[#141414] font-medium">{customer.eventsCount} ta</span>
-                                            </td>
-                                            <td className="p-4">
-                                                <span className={`inline-flex px-2.5 py-1 rounded-[8px] text-[11px] font-bold ${customer.status === 'Faol' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'
-                                                    }`}>
-                                                    {customer.status}
-                                                </span>
-                                            </td>
-                                            <td className="p-4">
-                                                <span className="text-[13px] text-[#999999]">{customer.joinDate}</span>
-                                            </td>
-                                            <td className="p-4 text-right pr-6">
-                                                <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                    <button className="p-2 hover:bg-[#F5F5F5] hover:text-[#141414] rounded-[8px] transition-colors text-[#999999]" title="Tahrirlash">
-                                                        <PencilIcon className="w-4.5 h-4.5" />
-                                                    </button>
-                                                    <button className="p-2 hover:bg-red-50 hover:text-red-600 rounded-[8px] transition-colors text-[#999999]" title="O'chirish">
-                                                        <TrashIcon className="w-4.5 h-4.5" />
-                                                    </button>
-                                                    <button className="p-2 hover:bg-[#F3F2F0] rounded-[8px] transition-colors text-[#999999]">
-                                                        <EllipsisHorizontalIcon className="w-5 h-5" />
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </motion.tr>
                                     ))}
-                                </tbody>
-                            </motion.table>
-                        ) : (
-                            <motion.div
-                                key="grid-view"
-                                initial="hidden"
-                                animate="visible"
-                                exit={{ opacity: 0, scale: 0.95 }}
-                                variants={tableVariants}
-                                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4"
-                            >
-                                {customers.map((customer) => (
-                                    <motion.div
-                                        key={customer.id}
-                                        variants={rowVariants}
-                                        className={`bg-white border border-[#F0F0F0] rounded-[8px] p-4 flex flex-col gap-4 relative group transition-all hover:border-[#141414] ${selectedMijozlar.includes(customer.id) ? 'bg-[#F9F9F8] border-[#141414]' : ''
-                                            }`}
+                                </tr>
+                            ))}
+                        </thead>
+                        <tbody className="divide-y divide-[#F0F0F0]">
+                            {table.getRowModel().rows.length > 0 ? (
+                                table.getRowModel().rows.map(row => (
+                                    <tr
+                                        key={row.id}
+                                        onClick={() => setSelectedCustomer(row.original)}
+                                        className={`hover:bg-[#FBFBFB] transition-colors group cursor-pointer ${row.getIsSelected() ? 'bg-[#F9F9F8]' : ''}`}
                                     >
-                                        <div className="absolute top-3 left-3">
-                                            <input
-                                                type="checkbox"
-                                                checked={selectedMijozlar.includes(customer.id)}
-                                                onChange={() => toggleSelect(customer.id)}
-                                                className={`w-4 h-4 rounded border-[#D0D0D0] text-[#141414] focus:ring-0 cursor-pointer ${selectedMijozlar.includes(customer.id) ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-                                                    } transition-opacity`}
-                                            />
-                                        </div>
-
-                                        <div className="flex items-start justify-between mt-2 gap-3">
-                                            <div className="flex items-center gap-3 w-full">
-                                                <div className="relative group/avatar w-16 h-16 rounded-full bg-[#F5F5F5] border border-[#E0E0E0] flex items-center justify-center text-[18px] font-bold text-[#141414] overflow-hidden flex-shrink-0">
-                                                    {customer.image}
-                                                    <div
-                                                        className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity cursor-pointer text-white"
-                                                        title="Rasmni yuklab olish"
-                                                    >
-                                                        <ArrowDownTrayIcon className="w-5 h-5" />
-                                                    </div>
-                                                </div>
-                                                <div className="flex flex-col flex-1 min-w-0 pr-2">
-                                                    <span className="text-[16px] font-bold text-[#141414] leading-tight break-words">{customer.name}</span>
-                                                    <span className="text-[13px] text-[#999999] mt-0.5 break-all">{customer.email}</span>
-                                                </div>
-                                            </div>
-                                            <button className="p-2 hover:bg-[#F5F5F5] rounded-[8px] transition-colors text-[#999999] flex-shrink-0">
-                                                <EllipsisHorizontalIcon className="w-5 h-5" />
-                                            </button>
-                                        </div>
-
-                                        <div className="flex flex-col gap-2 pt-2 border-t border-[#F5F5F5]">
-                                            <div className="flex justify-between items-center text-[13px]">
-                                                <span className="text-[#999999]">Telefon</span>
-                                                <span className="text-[#141414] font-medium">{customer.phone}</span>
-                                            </div>
-                                            <div className="flex justify-between items-start text-[13px] gap-2">
-                                                <span className="text-[#999999] flex-shrink-0 pt-0.5">Faoliyati</span>
-                                                <span className="text-[#141414] font-medium text-right leading-relaxed">{customer.activity}</span>
-                                            </div>
-                                            <div className="flex justify-between items-center text-[13px]">
-                                                <span className="text-[#999999]">Tadbirlar</span>
-                                                <span className="text-[#141414] font-medium">{customer.eventsCount} ta</span>
-                                            </div>
-                                            <div className="flex justify-between items-center text-[13px]">
-                                                <span className="text-[#999999]">Status</span>
-                                                <span className={`px-2 py-0.5 rounded-[8px] text-[11px] font-bold ${customer.status === 'Faol' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'
-                                                    }`}>
-                                                    {customer.status}
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex items-center gap-2 mt-auto pt-2">
-                                            <button className="flex-1 flex items-center justify-center gap-2 py-2 bg-white border border-[#E0E0E0] rounded-[8px] text-[12px] font-bold text-[#141414] hover:bg-[#F9F9F8] transition-colors">
-                                                <PencilIcon className="w-3.5 h-3.5" />
-                                                Tahrirlash
-                                            </button>
-                                            <button className="w-10 h-9 flex items-center justify-center bg-red-50 rounded-[8px] text-red-600 hover:bg-red-100 transition-colors">
-                                                <TrashIcon className="w-4 h-4" />
-                                            </button>
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
+                                        {row.getVisibleCells().map(cell => (
+                                            <td key={cell.id} className="p-4">
+                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={columns.length} className="p-12 text-center text-[#999999] text-[14px]">
+                                        Ma'lumot topilmadi
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
             </div>
+
+            {/* Sidebar Overlay */}
+            <AnimatePresence>
+                {selectedCustomer && (
+                    <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setSelectedCustomer(null)}
+                        className="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-40"
+                    />
+                )}
+            </AnimatePresence>
+
+            {/* Details Sidebar */}
+            <AnimatePresence>
+                {selectedCustomer && (
+                    <motion.div
+                        initial={{ x: '100%' }}
+                        animate={{ x: 0 }}
+                        exit={{ x: '100%' }}
+                        transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+                        className="fixed top-0 right-0 w-[480px] h-full bg-white z-50 flex flex-col border-l border-[#E0E0E0] shadow-sm"
+                    >
+                        <div className="flex items-center justify-between px-6 py-4 border-b border-[#F0F0F0] bg-white sticky top-0 z-10">
+                            <h2 className="text-[16px] font-bold text-[#141414]">Mijoz profili</h2>
+                            <div className="flex items-center gap-2">
+                                <button className="p-2 hover:bg-[#F5F5F5] rounded-[8px] transition-colors text-[#999999] hover:text-[#141414]">
+                                    <PencilIcon className="w-5 h-5" />
+                                </button>
+                                <button 
+                                    onClick={() => setSelectedCustomer(null)}
+                                    className="p-2 hover:bg-[#F5F5F5] rounded-[8px] transition-colors text-[#999999]"
+                                >
+                                    <XMarkIcon className="w-5 h-5" />
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="flex-1 overflow-y-auto no-scrollbar">
+                            <div className="relative h-64 w-full group">
+                                <img src={selectedCustomer.image} alt="" className="w-full h-full object-cover" />
+                                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all" />
+                                <div className="absolute bottom-4 left-6 right-6 flex items-center justify-between">
+                                    <div className="flex gap-2">
+                                        <button className="px-3 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-[6px] text-white text-[12px] font-bold hover:bg-white/20 transition-all flex items-center gap-1.5">
+                                            <PhotoIcon className="w-3.5 h-3.5" />
+                                            Update
+                                        </button>
+                                        <button className="px-3 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-[6px] text-white text-[12px] font-bold hover:bg-white/20 transition-all flex items-center gap-1.5">
+                                            <ArrowDownTrayIcon className="w-3.5 h-3.5" />
+                                            Save
+                                        </button>
+                                    </div>
+                                    <span className={`px-2.5 py-1 rounded-[4px] text-[10px] font-bold uppercase tracking-wider backdrop-blur-md border ${selectedCustomer.status === 'Faol' ? 'bg-green-500/20 text-green-100 border-green-500/30' : 'bg-red-500/20 text-red-100 border-red-500/30'}`}>
+                                        {selectedCustomer.status}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div className="p-8 flex flex-col gap-8 text-left">
+                                <div className="flex flex-col gap-1">
+                                    <div className="flex items-center justify-between group">
+                                        <h1 className="text-[28px] font-bold text-[#141414] leading-tight">{selectedCustomer.name}</h1>
+                                        <PencilIcon className="w-4 h-4 text-[#999999] opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity" />
+                                    </div>
+                                    <div className="flex items-center gap-2 mt-2 group">
+                                        <BriefcaseIcon className="w-4 h-4 text-[#999999]" />
+                                        <span className="text-[15px] font-medium text-[#141414]">{selectedCustomer.activity}</span>
+                                        <PencilIcon className="w-3.5 h-3.5 text-[#999999] opacity-0 group-hover:opacity-100 cursor-pointer" />
+                                    </div>
+                                    <div className="inline-flex mt-2">
+                                        <span className="bg-[#F5F5F5] text-[#777777] text-[12px] font-bold px-2 py-0.5 rounded-[4px]">
+                                            Soha: {selectedCustomer.industry}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="p-4 bg-[#FBFBFB] border border-[#F0F0F0] rounded-[8px] group">
+                                        <div className="flex items-center justify-between mb-1">
+                                            <span className="text-[11px] font-bold text-[#999999] uppercase">Telefon</span>
+                                            <PencilIcon className="w-3 h-3 text-[#999999] opacity-0 group-hover:opacity-100 cursor-pointer" />
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <PhoneIcon className="w-3.5 h-3.5 text-[#141414]" />
+                                            <span className="text-[14px] font-bold text-[#141414]">{selectedCustomer.phone}</span>
+                                        </div>
+                                    </div>
+                                    <div className="p-4 bg-[#FBFBFB] border border-[#F0F0F0] rounded-[8px] group">
+                                        <div className="flex items-center justify-between mb-1">
+                                            <span className="text-[11px] font-bold text-[#999999] uppercase">Email</span>
+                                            <PencilIcon className="w-3 h-3 text-[#999999] opacity-0 group-hover:opacity-100 cursor-pointer" />
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <EnvelopeIcon className="w-3.5 h-3.5 text-[#141414]" />
+                                            <span className="text-[13px] font-bold text-[#141414] truncate">{selectedCustomer.email || '-'}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-4">
+                                    <div className="flex items-center justify-between p-4 border border-[#F0F0F0] rounded-[8px]">
+                                        <div className="flex flex-col gap-0.5">
+                                            <span className="text-[11px] font-bold text-[#999999] uppercase">Aktivlik</span>
+                                            <div className="flex gap-1 mt-1">
+                                                {[1, 2, 3, 4, 5].map((star) => (
+                                                    <span key={star}>
+                                                        {star <= rating ? (
+                                                            <StarSolidIcon className="w-4 h-4 text-orange-400" />
+                                                        ) : (
+                                                            <StarOutlineIcon className="w-4 h-4 text-[#E0E0E0]" />
+                                                        )}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div className="text-right">
+                                            <span className="text-[11px] font-bold text-[#999999] uppercase">Tadbirlar</span>
+                                            <div className="text-[18px] font-bold text-[#141414]">{selectedCustomer.eventsCount} ta</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-4">
+                                    <div className="flex items-center justify-between">
+                                        <h3 className="text-[14px] font-bold text-[#141414]">Tadbirlar tarixi</h3>
+                                        <button 
+                                            onClick={() => setShowFullHistory(!showFullHistory)}
+                                            className="text-[12px] font-bold text-[#999999] hover:text-[#141414] transition-colors"
+                                        >
+                                            {showFullHistory ? 'Hide' : 'Show All'}
+                                        </button>
+                                    </div>
+                                    
+                                    {selectedCustomer.history.length > 0 ? (
+                                        <div className="border-l-2 border-[#F0F0F0] ml-2 space-y-6">
+                                            {(showFullHistory ? selectedCustomer.history : selectedCustomer.history.slice(0, 3)).map((event) => (
+                                                <div key={event.id} className="relative pl-6">
+                                                    <div className="absolute left-[-5px] top-1.5 w-2 h-2 rounded-full bg-[#141414] border-2 border-white" />
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[14px] font-bold text-[#141414]">{event.eventName}</span>
+                                                        <div className="flex items-center gap-3 mt-1 text-[12px] text-[#999999] font-medium">
+                                                            <span className="flex items-center gap-1">
+                                                                <CalendarIcon className="w-3.5 h-3.5" />
+                                                                {event.date}
+                                                            </span>
+                                                            <span className="px-1.5 py-0.5 bg-green-50 text-green-600 rounded-[4px] text-[10px] font-bold">
+                                                                {event.status}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <p className="text-[13px] text-[#999999] italic">Tarix mavjud emas</p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="mt-auto border-t border-[#F0F0F0] bg-[#FBFBFB] p-6 grid grid-cols-2 gap-6">
+                            <div className="flex flex-col gap-1">
+                                <span className="text-[10px] font-bold text-[#999999] uppercase">Klubga qo'shilgan</span>
+                                <div className="flex items-center gap-2">
+                                    <CalendarIcon className="w-4 h-4 text-[#141414]" />
+                                    <span className="text-[14px] font-bold text-[#141414]">{selectedCustomer.joinDate}</span>
+                                </div>
+                            </div>
+                            <div className="flex flex-col gap-1 text-right">
+                                <span className="text-[10px] font-bold text-[#999999] uppercase">Jami xarajat</span>
+                                <div className="flex items-center justify-end gap-2">
+                                    <BanknotesIcon className="w-4 h-4 text-green-600" />
+                                    <span className="text-[16px] font-bold text-green-600">{selectedCustomer.totalSpent}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Add Customer Modal */}
+            <AnimatePresence>
+                {isAddModalOpen && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                        <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsAddModalOpen(false)}
+                            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+                        />
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                            className="bg-white rounded-[12px] shadow-2xl w-full max-w-xl relative overflow-hidden flex flex-col"
+                        >
+                            <div className="p-6 border-b border-[#F0F0F0] flex items-center justify-between bg-white">
+                                <h3 className="text-[18px] font-bold text-[#141414]">Yangi mijoz qo'shish</h3>
+                                <button 
+                                    onClick={() => setIsAddModalOpen(false)}
+                                    className="p-1 hover:bg-[#F5F5F5] rounded-full transition-all"
+                                >
+                                    <XMarkIcon className="w-6 h-6 text-[#999999]" />
+                                </button>
+                            </div>
+
+                            <form onSubmit={handleAddCustomer} className="p-6 overflow-y-auto max-h-[80vh] no-scrollbar">
+                                <div className="grid grid-cols-1 gap-6">
+                                    {/* Image Upload */}
+                                    <div className="flex flex-col items-center gap-4">
+                                        <div 
+                                            onClick={() => document.getElementById('image-upload')?.click()}
+                                            className="w-28 h-28 rounded-[12px] border-2 border-dashed border-[#E0E0E0] bg-[#F9F9F9] flex flex-col items-center justify-center text-[#999999] relative overflow-hidden group hover:border-[#141414] hover:bg-white transition-all cursor-pointer"
+                                        >
+                                            {newCustomer.image ? (
+                                                <>
+                                                    <img src={newCustomer.image} alt="" className="w-full h-full object-cover" />
+                                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                                        <CameraIcon className="w-6 h-6 text-white" />
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <div className="flex flex-col items-center gap-1">
+                                                    <CameraIcon className="w-8 h-8 opacity-30" />
+                                                    <span className="text-[11px] font-bold">RASM YUKLASH</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <input 
+                                            id="image-upload"
+                                            type="file" 
+                                            accept="image/*"
+                                            onChange={handleImageChange}
+                                            className="hidden"
+                                        />
+                                        <p className="text-[11px] text-[#999999] font-medium text-center">
+                                            Tavsiya etiladi: Kvadrat rasm, max 2MB
+                                        </p>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="flex flex-col gap-1.5">
+                                            <label className="text-[12px] font-bold text-[#141414]">ISM FAMILYASI *</label>
+                                            <input 
+                                                required
+                                                type="text" 
+                                                value={newCustomer.name}
+                                                onChange={e => setNewCustomer({...newCustomer, name: e.target.value})}
+                                                placeholder="Masalan: Aziz Rahimov" 
+                                                className="w-full px-4 py-2 bg-[#F5F5F5] border-transparent rounded-[8px] text-[13px] outline-hidden focus:bg-white focus:ring-1 focus:ring-[#141414]/10"
+                                            />
+                                        </div>
+                                        <div className="flex flex-col gap-1.5">
+                                            <label className="text-[12px] font-bold text-[#141414]">SOHA *</label>
+                                            <input 
+                                                required
+                                                type="text" 
+                                                value={newCustomer.industry}
+                                                onChange={e => setNewCustomer({...newCustomer, industry: e.target.value})}
+                                                placeholder="Masalan: IT, Marketing" 
+                                                className="w-full px-4 py-2 bg-[#F5F5F5] border-transparent rounded-[8px] text-[13px] outline-hidden focus:bg-white focus:ring-1 focus:ring-[#141414]/10"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="flex flex-col gap-1.5">
+                                        <label className="text-[12px] font-bold text-[#141414]">BIZNES FAOLIYATI *</label>
+                                        <textarea 
+                                            required
+                                            rows={2}
+                                            value={newCustomer.activity}
+                                            onChange={e => setNewCustomer({...newCustomer, activity: e.target.value})}
+                                            placeholder="Kompaniya nomi yoki loyiha haqida..." 
+                                            className="w-full px-4 py-2 bg-[#F5F5F5] border-transparent rounded-[8px] text-[13px] outline-hidden focus:bg-white focus:ring-1 focus:ring-[#141414]/10 resize-none"
+                                        />
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="flex flex-col gap-1.5">
+                                            <label className="text-[12px] font-bold text-[#141414]">TELEFON RAQAMI *</label>
+                                            <input 
+                                                required
+                                                type="text" 
+                                                value={newCustomer.phone}
+                                                onChange={handlePhoneChange}
+                                                placeholder="+998 90 123 45 67" 
+                                                className="w-full px-4 py-2 bg-[#F5F5F5] border-transparent rounded-[8px] text-[13px] outline-hidden focus:bg-white focus:ring-1 focus:ring-[#141414]/10 transition-all font-bold tracking-wide"
+                                            />
+                                        </div>
+                                        <div className="flex flex-col gap-1.5">
+                                            <label className="text-[12px] font-bold text-[#141414]">EMAIL (IXTIYORIY)</label>
+                                            <input 
+                                                type="email" 
+                                                value={newCustomer.email}
+                                                onChange={e => setNewCustomer({...newCustomer, email: e.target.value})}
+                                                placeholder="example@mail.uz" 
+                                                className="w-full px-4 py-2 bg-[#F5F5F5] border-transparent rounded-[8px] text-[13px] outline-hidden focus:bg-white focus:ring-1 focus:ring-[#141414]/10"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="flex flex-col gap-1.5">
+                                        <label className="text-[12px] font-bold text-[#141414]">KLUBGA QO'SHILGAN VAQT</label>
+                                        <input 
+                                            type="date" 
+                                            value={newCustomer.joinDate}
+                                            onChange={e => setNewCustomer({...newCustomer, joinDate: e.target.value})}
+                                            className="w-full px-4 py-2 bg-[#F5F5F5] border-transparent rounded-[8px] text-[13px] outline-hidden focus:bg-white focus:ring-1 focus:ring-[#141414]/10"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="mt-8 flex gap-3">
+                                    <button 
+                                        type="button"
+                                        onClick={() => setIsAddModalOpen(false)}
+                                        className="flex-1 px-4 py-2.5 bg-[#F5F5F5] text-[#141414] rounded-[8px] text-[13px] font-bold hover:bg-[#EAEAEA] transition-all"
+                                    >
+                                        Bekor qilish
+                                    </button>
+                                    <button 
+                                        type="submit"
+                                        className="flex-1 px-4 py-2.5 bg-[#141414] text-white rounded-[8px] text-[13px] font-bold hover:bg-black transition-all shadow-md active:scale-95"
+                                    >
+                                        Saqlash
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+            {/* Delete Confirmation Modal */}
+            <AnimatePresence>
+                {customerToDelete && (
+                    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+                        <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setCustomerToDelete(null)}
+                            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+                        />
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                            className="bg-white rounded-[16px] shadow-2xl w-full max-w-[400px] relative overflow-hidden p-6 flex flex-col items-center text-center gap-4"
+                        >
+                            <div className="w-14 h-14 bg-red-50 rounded-full flex items-center justify-center">
+                                <TrashIcon className="w-7 h-7 text-red-600" />
+                            </div>
+                            
+                            <div className="flex flex-col gap-1">
+                                <h3 className="text-[18px] font-bold text-[#141414]">Mijozni o'chirish</h3>
+                                <p className="text-[14px] text-[#999999] font-medium leading-relaxed">
+                                    Siz rostdan ham <span className="text-[#141414] font-bold">{customerToDelete.name}</span>ni tizimdan o'chirmoqchimisiz? Bu amalni ortga qaytarib bo'lmaydi.
+                                </p>
+                            </div>
+
+                            <div className="flex gap-3 w-full mt-2">
+                                <button 
+                                    onClick={() => setCustomerToDelete(null)}
+                                    className="flex-1 px-4 py-2.5 bg-[#F5F5F5] text-[#141414] rounded-[10px] text-[13px] font-bold hover:bg-[#EAEAEA] transition-all"
+                                >
+                                    Bekor qilish
+                                </button>
+                                <button
+                                    onClick={async () => {
+                                        try {
+                                            const { deleteClient } = await import("@/lib/supabase/queries/clients")
+                                            await deleteClient(customerToDelete.id)
+                                            setCustomers(prev => prev.filter(c => c.id !== customerToDelete.id));
+                                            setCustomerToDelete(null);
+                                        } catch (err) {
+                                            console.error("O'chirishda xatolik:", err)
+                                        }
+                                    }}
+                                    className="flex-1 px-4 py-2.5 bg-red-600 text-white rounded-[10px] text-[13px] font-bold hover:bg-red-700 transition-all shadow-md shadow-red-200 active:scale-95"
+                                >
+                                    O'chirish
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+            </>}
         </div>
     )
 }

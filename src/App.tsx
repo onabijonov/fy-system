@@ -2,15 +2,18 @@ import { useState } from "react"
 import { Sidebar } from "./components/layout/Sidebar"
 import { Dashboard } from "./components/pages/Dashboard"
 import { Mijozlar } from "./components/pages/Mijozlar"
+import { Sotuv } from "./components/pages/Sotuv"
+import { ThemeProvider } from "./context/ThemeContext"
+import { ThemeSwitcher } from "./components/ui/ThemeSwitcher"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   BellIcon,
   MagnifyingGlassIcon,
   ChevronDownIcon,
   Cog6ToothIcon
-} from "@heroicons/react/24/outline"
+} from "@heroicons/react/24/solid"
 
-function App() {
+function AppInner() {
   const [activeItem, setActiveItem] = useState("Dashboard")
   const [currentLang, setCurrentLang] = useState("uz")
   const [isLangOpen, setIsLangOpen] = useState(false)
@@ -24,43 +27,35 @@ function App() {
 
   const getPageDescription = () => {
     switch (activeItem) {
-      case "Dashboard":
-        return "Tizimdagi barcha asosiy ko'rsatkichlar va statistika."
-      case "Mijozlar":
-        return "Barcha mijozlar bazasi va ular bilan ishlash bo'limi."
-      case "Sotuv bo'limi":
-        return "Savdo jarayonlari, lidlar va pipline tahlili."
-      case "Tadbirlar":
-        return "Klub doirasidagi barcha tadbirlar va uchrashuvlar."
-      case "Bildirishnomalar":
-        return "Xabarnomalar, bot va SMS bildirishnomalar boshqaruvi."
-      case "Cash Flow":
-        return "Pul oqimi va moliyaviy tranzaksiyalar monitoringi."
-      case "To'lovlar":
-        return "Mijozlar tomonidan amalga oshirilgan barcha to'lovlar."
-      case "Hodimlar":
-        return "Jamoa a'zolari va ularning ruxsatnomalarini boshqarish."
-      case "Sozlamalar":
-        return "Tizim sozlamalari va shaxsiy ma'lumotlarni tahrirlash."
-      case "Podkast":
-        return "Audio kontentlar va podkastlar ro'yxati."
-      case "API":
-        return "Tizimning tashqi integratsiyalar va API sozlamalari."
-      default:
-        return "Ushbu bo'lim haqida ma'lumot yaqin orada qo'shiladi."
+      case "Dashboard": return "Tizimdagi barcha asosiy ko'rsatkichlar va statistika."
+      case "Mijozlar": return "Barcha mijozlar bazasi va ular bilan ishlash bo'limi."
+      case "Sotuv bo'limi": return "Savdo jarayonlari, lidlar va pipline tahlili."
+      case "Lidlar": return "Savdo jarayonlari, lidlar va pipline tahlili."
+      case "Pipline": return "Savdo jarayonlari, lidlar va pipline tahlili."
+      case "Tadbirlar": return "Klub doirasidagi barcha tadbirlar va uchrashuvlar."
+      case "Bildirishnomalar": return "Xabarnomalar, bot va SMS bildirishnomalar boshqaruvi."
+      case "Cash Flow": return "Pul oqimi va moliyaviy tranzaksiyalar monitoringi."
+      case "To'lovlar": return "Mijozlar tomonidan amalga oshirilgan barcha to'lovlar."
+      case "Hodimlar": return "Jamoa a'zolari va ularning ruxsatnomalarini boshqarish."
+      case "Sozlamalar": return "Tizim sozlamalari va shaxsiy ma'lumotlarni tahrirlash."
+      case "Podkast": return "Audio kontentlar va podkastlar ro'yxati."
+      case "API": return "Tizimning tashqi integratsiyalar va API sozlamalari."
+      default: return "Ushbu bo'lim haqida ma'lumot yaqin orada qo'shiladi."
     }
   }
 
   const renderContent = () => {
     switch (activeItem) {
-      case "Dashboard":
-        return <Dashboard />
-      case "Mijozlar":
-        return <Mijozlar />
+      case "Dashboard": return <Dashboard />
+      case "Mijozlar": return <Mijozlar />
+      case "Sotuv bo'limi": return <Sotuv />
+      case "Lidlar": return <Sotuv defaultTab="lidlar" />
+      case "Pipline": return <Sotuv defaultTab="pipeline" />
       default:
         return (
-          <div className="flex flex-col items-center justify-center h-full gap-4 text-[#999999] opacity-50">
-            <h1 className="text-4xl font-bold">{activeItem}</h1>
+          <div className="flex flex-col items-center justify-center h-full gap-4 opacity-30"
+            style={{ color: 'var(--header-muted)' }}>
+            <h1 className="text-4xl font-bold" style={{ color: 'var(--header-text)' }}>{activeItem}</h1>
             <p>Ushbu sahifa yaqin orada qo'shiladi.</p>
           </div>
         )
@@ -68,39 +63,68 @@ function App() {
   }
 
   return (
-    <div className="h-screen bg-[#F5F5F5] text-foreground flex overflow-hidden">
+    <div className="h-screen text-foreground flex overflow-hidden transition-colors duration-300"
+      style={{ background: 'var(--sidebar-bg)' }}>
       <Sidebar activeItem={activeItem} onNavigate={setActiveItem} />
-      <div className="flex-1 flex flex-col h-screen bg-white overflow-hidden rounded-none relative z-10 shadow-[-6px_0_24px_rgba(0,0,0,0.03)]">
-        {/* Kontent bo'limi (Child container) */}
+
+      {/* Main content panel */}
+      <div
+        className="flex-1 flex flex-col h-screen overflow-hidden rounded-none relative z-10 transition-colors duration-300"
+        style={{ background: 'var(--main-bg)' }}
+      >
         <div className="flex-1 flex flex-col relative min-h-0">
-          <header className="px-[24px] pt-[15px] pb-[15px] flex-shrink-0 border-b border-[#E0E0E0]">
-            <div className="h-[54px] bg-white apple-sq-12 flex items-center justify-between px-[16px]">
-              {/* Chap taraf: Bo'lim nomi va Izoh */}
+
+          {/* Header */}
+          <header
+            className="px-[24px] pt-[15px] pb-[15px] flex-shrink-0 transition-colors duration-300"
+            style={{ borderBottom: '1px solid var(--header-border)' }}
+          >
+            <div
+              className="h-[54px] apple-sq-12 flex items-center justify-between px-[16px]"
+              style={{ background: 'var(--header-bg)' }}
+            >
+              {/* Left: page title */}
               <div className="flex flex-col gap-[4px]">
-                <div className="text-[20px] font-bold text-[#141414] leading-tight">{activeItem}</div>
-                <div className="text-[12px] font-medium text-[#999999] leading-tight">{getPageDescription()}</div>
+                <div className="text-[20px] font-bold leading-tight" style={{ color: 'var(--header-text)' }}>
+                  {activeItem}
+                </div>
+                <div className="text-[12px] font-medium leading-tight" style={{ color: 'var(--header-muted)' }}>
+                  {getPageDescription()}
+                </div>
               </div>
 
-              {/* O'ng taraf: Qidiruv, Bildirishnoma, Til, Sozlamalar */}
+              {/* Right: Search, Notif, Lang, Theme, Settings */}
               <div className="flex items-center gap-[12px]">
-                {/* Qidiruv (Uzun search placeholder) */}
+
+                {/* Search */}
                 <div className="relative w-[320px]">
-                  <MagnifyingGlassIcon className="absolute left-[12px] top-1/2 -translate-y-1/2 w-5 h-5 text-[#999999]" />
+                  <MagnifyingGlassIcon
+                    className="absolute left-[12px] top-1/2 -translate-y-1/2 w-5 h-5"
+                    style={{ color: 'var(--header-muted)' }}
+                  />
                   <input
                     type="text"
                     placeholder="Tizim bo'ylab qidirish..."
-                    className="w-full bg-[#F3F2F0] border-none rounded-[8px] py-[10px] pl-[40px] pr-[16px] text-sm text-[#141414] placeholder:text-[#999999] focus:ring-0 outline-none"
+                    className="w-full border-none rounded-[8px] py-[10px] pl-[40px] pr-[16px] text-sm focus:ring-0 outline-none transition-colors"
+                    style={{
+                      background: 'var(--header-input-bg)',
+                      color: 'var(--header-text)',
+                    }}
                   />
                 </div>
 
-                {/* Bildirishnoma */}
+                {/* Notifications */}
                 <div className="relative">
                   <button
                     onClick={() => setIsNotifOpen(!isNotifOpen)}
-                    className={`relative p-2 rounded-[8px] transition-colors group ${isNotifOpen ? 'bg-[#F3F2F0]' : 'hover:bg-[#F3F2F0]'}`}
+                    className="relative p-2 rounded-[8px] transition-colors"
+                    style={{ background: isNotifOpen ? 'var(--header-hover)' : 'transparent' }}
+                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'var(--header-hover)'}
+                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = isNotifOpen ? 'var(--header-hover)' : 'transparent'}
                   >
-                    <BellIcon className="w-6 h-6 text-[#141414]" />
-                    <span className="absolute top-[8px] right-[8px] w-[10px] h-[10px] bg-[#FF3B30] border-2 border-white rounded-full"></span>
+                    <BellIcon className="w-6 h-6" style={{ color: 'var(--header-icon)' }} />
+                    <span className="absolute top-[8px] right-[8px] w-[10px] h-[10px] bg-[#FF3B30] border-2 rounded-full"
+                      style={{ borderColor: 'var(--main-bg)' }}></span>
                   </button>
 
                   <AnimatePresence>
@@ -109,65 +133,97 @@ function App() {
                         initial={{ opacity: 0, y: 8, scale: 0.98 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 8, scale: 0.98 }}
-                        className="absolute top-full right-0 mt-2 w-[300px] bg-white border border-[#E0E0E0] rounded-[8px] shadow-[0_10px_40px_rgba(0,0,0,0.08)] overflow-hidden z-50 origin-top-right"
+                        className="absolute top-full right-0 mt-2 w-[300px] rounded-[8px] shadow-[0_10px_40px_rgba(0,0,0,0.12)] overflow-hidden z-50 origin-top-right"
+                        style={{
+                          background: 'var(--dropdown-bg)',
+                          border: '1px solid var(--dropdown-border)',
+                        }}
                       >
-                        <div className="px-4 py-3 border-b border-[#F5F5F5] flex items-center justify-between">
-                          <span className="text-[14px] font-bold text-[#141414]">Bildirishnomalar</span>
+                        <div className="px-4 py-3 flex items-center justify-between"
+                          style={{ borderBottom: '1px solid var(--dropdown-border)' }}>
+                          <span className="text-[14px] font-bold" style={{ color: 'var(--dropdown-text)' }}>
+                            Bildirishnomalar
+                          </span>
                           <div className="w-2 h-2 bg-[#FF3B30] rounded-full shadow-[0_0_8px_rgba(255,59,48,0.4)]" />
                         </div>
-
                         <div className="max-h-[360px] overflow-y-auto no-scrollbar py-1">
                           {notifications.map((notif) => (
                             <div
                               key={notif.id}
-                              className={`px-4 py-2.5 flex items-start gap-3 hover:bg-[#F9F9F8] transition-colors cursor-pointer relative`}
+                              className="px-4 py-2.5 flex items-start gap-3 cursor-pointer transition-colors"
+                              style={{ color: 'var(--dropdown-text)' }}
+                              onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'var(--dropdown-hover-bg)'}
+                              onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}
                             >
-                              <div className={`mt-1 w-2 h-2 rounded-full flex-shrink-0 ${notif.unread ? 'bg-primary' : 'bg-transparent border border-[#D0D0D0]'
-                                }`} />
+                              <div className={`mt-1 w-2 h-2 rounded-full flex-shrink-0 ${notif.unread ? '' : 'border'}`}
+                                style={{
+                                  background: notif.unread ? 'var(--accent)' : 'transparent',
+                                  borderColor: 'var(--dropdown-border)',
+                                }} />
                               <div className="flex flex-col gap-0.5 overflow-hidden">
-                                <div className="text-[12px] font-bold text-[#141414] leading-tight">{notif.title}</div>
-                                <div className="text-[11px] text-[#666666] line-clamp-1 leading-tight">{notif.desc}</div>
-                                <div className="text-[10px] text-[#BBBBBB] mt-0.5">{notif.time}</div>
+                                <div className="text-[12px] font-bold leading-tight">{notif.title}</div>
+                                <div className="text-[11px] line-clamp-1 leading-tight" style={{ color: 'var(--dropdown-muted)' }}>{notif.desc}</div>
+                                <div className="text-[10px] mt-0.5" style={{ color: 'var(--dropdown-muted)', opacity: 0.7 }}>{notif.time}</div>
                               </div>
                             </div>
                           ))}
                         </div>
-
-                        <button className="w-full py-2.5 text-[11px] font-bold text-[#999999] hover:text-[#141414] hover:bg-[#F9F9F8] transition-colors border-t border-[#F5F5F5]">
-                          Bunasini hammasini ko'rish
+                        <button
+                          className="w-full py-2.5 text-[11px] font-bold transition-colors"
+                          style={{ borderTop: '1px solid var(--dropdown-border)', color: 'var(--dropdown-muted)' }}
+                          onMouseEnter={e => {
+                            (e.currentTarget as HTMLElement).style.background = 'var(--dropdown-hover-bg)'
+                              ; (e.currentTarget as HTMLElement).style.color = 'var(--dropdown-text)'
+                          }}
+                          onMouseLeave={e => {
+                            (e.currentTarget as HTMLElement).style.background = 'transparent'
+                              ; (e.currentTarget as HTMLElement).style.color = 'var(--dropdown-muted)'
+                          }}
+                        >
+                          Barchasini ko'rish
                         </button>
                       </motion.div>
                     )}
                   </AnimatePresence>
                 </div>
 
-                {/* Til o'zgartirish */}
+                {/* Language */}
                 <div className="relative">
                   <button
                     onClick={() => setIsLangOpen(!isLangOpen)}
-                    className="flex items-center gap-[6px] px-3 py-2 bg-[#F3F2F0] rounded-[8px] cursor-pointer hover:bg-[#E7E6E4] transition-colors"
+                    className="flex items-center gap-[6px] px-3 py-2 rounded-[8px] cursor-pointer transition-colors"
+                    style={{ background: 'var(--header-input-bg)', color: 'var(--header-text)' }}
                   >
-                    <span className="text-sm font-semibold text-[#141414] uppercase">{currentLang}</span>
-                    <ChevronDownIcon className={`w-4 h-4 text-[#999999] transition-transform duration-200 ${isLangOpen ? 'rotate-180' : ''}`} />
+                    <span className="text-sm font-semibold uppercase">{currentLang}</span>
+                    <ChevronDownIcon
+                      className={`w-4 h-4 transition-transform duration-200 ${isLangOpen ? 'rotate-180' : ''}`}
+                      style={{ color: 'var(--header-muted)' }}
+                    />
                   </button>
-
                   <AnimatePresence>
                     {isLangOpen && (
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
-                        className="absolute top-full right-0 mt-2 w-[80px] bg-white border border-[#D0D0D0] rounded-[8px] shadow-lg overflow-hidden z-50"
+                        className="absolute top-full right-0 mt-2 w-[80px] rounded-[8px] shadow-lg overflow-hidden z-50"
+                        style={{ background: 'var(--dropdown-bg)', border: '1px solid var(--dropdown-border)' }}
                       >
                         {['uz', 'ru', 'en'].map((lang) => (
                           <button
                             key={lang}
-                            onClick={() => {
-                              setCurrentLang(lang);
-                              setIsLangOpen(false);
+                            onClick={() => { setCurrentLang(lang); setIsLangOpen(false) }}
+                            className="w-full px-4 py-2 text-sm font-medium transition-colors text-left uppercase"
+                            style={{
+                              color: currentLang === lang ? 'var(--accent)' : 'var(--dropdown-text)',
+                              background: currentLang === lang ? 'var(--dropdown-active-bg)' : 'transparent',
                             }}
-                            className={`w-full px-4 py-2 text-sm font-medium hover:bg-[#F3F2F0] transition-colors text-left uppercase ${currentLang === lang ? 'text-primary bg-[#F3F2F0]' : 'text-[#141414]'
-                              }`}
+                            onMouseEnter={e => {
+                              if (currentLang !== lang) (e.currentTarget as HTMLElement).style.background = 'var(--dropdown-hover-bg)'
+                            }}
+                            onMouseLeave={e => {
+                              if (currentLang !== lang) (e.currentTarget as HTMLElement).style.background = 'transparent'
+                            }}
                           >
                             {lang}
                           </button>
@@ -177,18 +233,29 @@ function App() {
                   </AnimatePresence>
                 </div>
 
-                {/* Sozlamalar */}
-                <button className="p-2 hover:bg-[#F3F2F0] rounded-[8px] transition-colors group">
-                  <Cog6ToothIcon className="w-6 h-6 text-[#141414]" />
+                {/* Theme switcher */}
+                <ThemeSwitcher />
+
+                {/* Settings */}
+                <button
+                  className="p-2 rounded-[8px] transition-colors"
+                  style={{ color: 'var(--header-icon)' }}
+                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'var(--header-hover)'}
+                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}
+                >
+                  <Cog6ToothIcon className="w-6 h-6" />
                 </button>
               </div>
             </div>
           </header>
-          <main className="flex-1 px-[16px] pt-[32px] pb-[20px] overflow-y-auto no-scrollbar relative">
+
+          {/* Main scroll area */}
+          <main className="flex-1 px-[16px] pt-[32px] pb-[20px] overflow-y-auto no-scrollbar relative"
+            style={{ background: 'var(--main-bg)' }}>
             <div className="max-w-[1400px] mx-auto h-full">
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={activeItem}
+                  key={["Sotuv bo'limi", "Lidlar", "Pipline"].includes(activeItem) ? "sotuv" : activeItem}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
@@ -203,6 +270,14 @@ function App() {
         </div>
       </div>
     </div>
+  )
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <AppInner />
+    </ThemeProvider>
   )
 }
 
